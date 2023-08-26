@@ -1,17 +1,16 @@
 # Problem 1
-def duple1(n, a)
+# Naive approach
+def duple(n, a)
   result = Array.new
   a.each { |i| n.times { result << i } }
   result
 end
 
-def duple(n, a)
-  result = Array.new do
-    
-  end
+# Using Array.flat_map method
+def duple1(n, a)
+  a.flat_map {|i| [i] * n}
 end
 
-#Problem 2
 
 # test functions
 def problem1_tests

@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf9b33ff-736a-41bb-b596-043139943f18" name="Changes" comment="added tests">
+    <list default="true" id="bf9b33ff-736a-41bb-b596-043139943f18" name="Changes" comment="second version in process">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ObjOrienDesignRuby/FirstAssignment.rb" beforeDir="false" afterPath="$PROJECT_DIR$/ObjOrienDesignRuby/FirstAssignment.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ObjOrienDesignRuby/experiments.rb" beforeDir="false" afterPath="$PROJECT_DIR$/ObjOrienDesignRuby/experiments.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +73,7 @@
       <updated>1693003058772</updated>
       <workItem from="1693003059815" duration="202000" />
       <workItem from="1693003267903" duration="4008000" />
-      <workItem from="1693084209792" duration="3902000" />
+      <workItem from="1693084209792" duration="6030000" />
     </task>
     <task id="LOCAL-00001" summary="project refactoring &amp; init">
       <option name="closed" value="true" />
@@ -114,7 +115,15 @@
       <option name="project" value="LOCAL" />
       <updated>1693086370575</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="second version in process">
+      <option name="closed" value="true" />
+      <created>1693088214606</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1693088214606</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -126,10 +135,11 @@
     <MESSAGE value=".gitignore" />
     <MESSAGE value="first assignment" />
     <MESSAGE value="added tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="added tests" />
+    <MESSAGE value="second version in process" />
+    <option name="LAST_COMMIT_MESSAGE" value="second version in process" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/University@FirstAssignment.rcov" NAME="FirstAssignment Coverage Results" MODIFIED="1693087499100" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="University" />
-    <SUITE FILE_PATH="coverage/University@experiments.rcov" NAME="experiments Coverage Results" MODIFIED="1693085186269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="University" />
+    <SUITE FILE_PATH="coverage/University@FirstAssignment.rcov" NAME="FirstAssignment Coverage Results" MODIFIED="1693090569898" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="University" />
+    <SUITE FILE_PATH="coverage/University@experiments.rcov" NAME="experiments Coverage Results" MODIFIED="1693090609833" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="University" />
   </component>
 </project>
