@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf9b33ff-736a-41bb-b596-043139943f18" name="Changes" comment="project refactoring &amp; init" />
+    <list default="true" id="bf9b33ff-736a-41bb-b596-043139943f18" name="Changes" comment=".gitignore">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ObjOrienDesignRuby/FirstAssignment.rb" beforeDir="false" afterPath="$PROJECT_DIR$/ObjOrienDesignRuby/FirstAssignment.rb" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,7 +65,7 @@
       <option name="presentableId" value="Default" />
       <updated>1693003058772</updated>
       <workItem from="1693003059815" duration="202000" />
-      <workItem from="1693003267903" duration="547000" />
+      <workItem from="1693003267903" duration="3738000" />
     </task>
     <task id="LOCAL-00001" summary="project refactoring &amp; init">
       <option name="closed" value="true" />
@@ -71,7 +75,23 @@
       <option name="project" value="LOCAL" />
       <updated>1693003370510</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary=".girignore">
+      <option name="closed" value="true" />
+      <created>1693003877095</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1693003877095</updated>
+    </task>
+    <task id="LOCAL-00003" summary=".gitignore">
+      <option name="closed" value="true" />
+      <created>1693004146409</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1693004146409</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -79,9 +99,11 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="project refactoring &amp; init" />
-    <option name="LAST_COMMIT_MESSAGE" value="project refactoring &amp; init" />
+    <MESSAGE value=".girignore" />
+    <MESSAGE value=".gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value=".gitignore" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/University@FirstAssignment.rcov" NAME="FirstAssignment Coverage Results" MODIFIED="1693003326612" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="University" />
+    <SUITE FILE_PATH="coverage/University@FirstAssignment.rcov" NAME="FirstAssignment Coverage Results" MODIFIED="1693011054566" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="University" />
   </component>
 </project>
