@@ -5,3 +5,9 @@ b = a.flat_map {|i| [i] * n}
 print b
 puts
 print a.flat_map {|i| [i] * n}
+
+n.times {|i| puts i}
+
+array = [1]
+puts
+puts array[0-2]

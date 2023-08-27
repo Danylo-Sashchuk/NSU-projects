@@ -12,7 +12,22 @@ def duple1(n, a)
 end
 
 # Problem 2
-def fib_array(i) end
+def fib_array(n)
+  fibonacci_array = [1, 1]
+  if n == 0
+    return [0]
+  end
+  if n == 1
+    return [1]
+  end
+  if n == 2
+    return fibonacci_array
+  end
+  (2...n).each do |i|
+    fibonacci_array.push(fibonacci_array[i - 2] + fibonacci_array[i - 1])
+  end
+  fibonacci_array
+end
 
 # test functions
 def problem1_tests
@@ -27,7 +42,7 @@ def problem2_tests
   puts "-------------------\n\nProblem 2 - Fibonacci Array:"
   puts "Test 1: " + problem2_test_is_passed?(1, [1]).to_s
   puts "Test 1: " + problem2_test_is_passed?(2, [1, 1]).to_s
-  puts "Test 1: " + problem2_test_is_passed?(1, [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]).to_s
+  puts "Test 1: " + problem2_test_is_passed?(10, [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]).to_s
 end
 
 def problem1_test_is_passed?(n, array, expected)
