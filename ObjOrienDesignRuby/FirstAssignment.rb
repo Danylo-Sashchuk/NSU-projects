@@ -33,7 +33,21 @@ def fib(n)
 end
 
 # Problem 4
-def is_palindrome?(s) end
+# Two Pointer Approach
+def is_palindrome_iterative?(s)
+  left, right = 0, s.length - 1
+  while left < right do
+    return false if s[left += 1] != s[right -= 1]
+  end
+  true
+end
+
+# Recursive Approach
+def is_palindrome?(s)
+  return true if s.length <= 1
+  return is_palindrome?(s[1...s.length - 1]) if s[0] == s[s.length - 1]
+  false
+end
 
 # test functions
 def problem1_tests
