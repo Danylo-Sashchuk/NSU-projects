@@ -20,7 +20,17 @@ def fib_array(n)
   fibonacci_array
 end
 
-
+# Problem 3
+def fib(n)
+  first = 1
+  second = 1
+  (2...n).each do
+    third = first + second
+    first = second
+    second = third
+  end
+  second
+end
 
 # test functions
 def problem1_tests
@@ -38,6 +48,14 @@ def problem2_tests
   puts "Test 3: " + problem2_test_is_passed?(10, [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]).to_s
 end
 
+def problem3_tests
+  puts "-------------------\n\nProblem 3 - Fibonacci Number:"
+  puts "Test 1: " + problem3_test_is_passed?(10, 55).to_s
+  puts "Test 2: " + problem3_test_is_passed?(100, 354224848179261915075).to_s
+  puts "Test 3: " + problem3_test_is_passed?(1, 1).to_s
+  puts "Test 4: " + problem3_test_is_passed?(2, 1).to_s
+end
+
 def problem1_test_is_passed?(n, array, expected)
   actual = duple(n, array)
   actual == expected
@@ -48,6 +66,12 @@ def problem2_test_is_passed?(i, expected)
   actual == expected
 end
 
+def problem3_test_is_passed?(i, expected)
+  actual = fib(i)
+  actual == expected
+end
+
 # run tests
 problem1_tests
 problem2_tests
+problem3_tests
