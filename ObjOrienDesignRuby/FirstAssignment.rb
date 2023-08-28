@@ -50,8 +50,18 @@ def is_palindrome(s)
 end
 
 # Problem 5
+# Treating the input as a number
 def consecutive_digits(n)
-
+  return false if n / 10 == 0
+  previous_digit = n % 10
+  n /= 10
+  while n != 0 do
+    current_digit = n % 10
+    return true if current_digit == previous_digit
+    previous_digit = current_digit
+    n /= 10
+  end
+  false
 end
 
 # test functions
@@ -123,3 +133,4 @@ problem1_tests
 problem2_tests
 problem3_tests
 problem4_tests
+problem5_tests

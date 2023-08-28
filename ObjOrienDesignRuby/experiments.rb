@@ -22,4 +22,11 @@ def consecutive_digits(n)
   print result
 end
 
-consecutive_digits(12345)
+def call1
+  puts 'start of method'
+  yield
+  puts 'and again'
+  yield
+end
+
+call1 { puts 'hello world' }
