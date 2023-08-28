@@ -43,10 +43,15 @@ def is_palindrome_iterative?(s)
 end
 
 # Recursive Approach
-def is_palindrome?(s)
+def is_palindrome(s)
   return true if s.length <= 1
-  return is_palindrome?(s[1...s.length - 1]) if s[0] == s[s.length - 1]
+  return is_palindrome(s[1...s.length - 1]) if s[0] == s[s.length - 1]
   false
+end
+
+# Problem 5
+def consecutive_digits(n)
+
 end
 
 # test functions
@@ -80,6 +85,14 @@ def problem4_tests
   puts "Test 3: " + test_problem4?("peach", false).to_s
 end
 
+def problem5_tests
+  puts "-------------------\n\nProblem 5 - Consecutive Digits:"
+  puts "Test 1: " + test_problem5?(2, false).to_s
+  puts "Test 2: " + test_problem5?(22, true).to_s
+  puts "Test 3: " + test_problem5?(54332, true).to_s
+  puts "Test 3: " + test_problem5?(123454321, false).to_s
+end
+
 def test_problem1?(n, array, expected)
   actual = duple(n, array)
   actual == expected
@@ -96,7 +109,12 @@ def test_problem3?(i, expected)
 end
 
 def test_problem4?(s, expected)
-  actual = is_palindrome?(s)
+  actual = is_palindrome(s)
+  actual == expected
+end
+
+def test_problem5?(n, expected)
+  actual = consecutive_digits(n)
   actual == expected
 end
 
