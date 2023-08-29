@@ -126,39 +126,39 @@ end
 def problem1_tests
   array = [1, 2, 3]
   puts "Problem 1 - Array Duplication: "
-  puts "Test 1: " + test_problem1?(4, array, [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3]).to_s
-  puts "Test 2: " + test_problem1?(1, array, [1, 2, 3]).to_s
-  puts "Test 3: " + test_problem1?(0, array, []).to_s
+  puts "Test 1: " + test([1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3]) { duple(4, array) }.to_s
+  puts "Test 1: " + test([1, 2, 3]) { duple(1, array) }.to_s
+  puts "Test 1: " + test([]) { duple(0, array) }.to_s
 end
 
 def problem2_tests
   puts "-------------------\n\nProblem 2 - Fibonacci Array:"
-  puts "Test 1: " + test_problem2?(1, [1]).to_s
-  puts "Test 2: " + test_problem2?(2, [1, 1]).to_s
-  puts "Test 3: " + test_problem2?(10, [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]).to_s
+  puts "Test 1: " + test([1]) { fib_array(1) }.to_s
+  puts "Test 2: " + test([1, 1]) { fib_array(2) }.to_s
+  puts "Test 3: " + test([1, 1, 2, 3, 5, 8, 13, 21, 34, 55]) { fib_array(10) }.to_s
 end
 
 def problem3_tests
   puts "-------------------\n\nProblem 3 - Fibonacci Number:"
-  puts "Test 1: " + test_problem3?(10, 55).to_s
-  puts "Test 2: " + test_problem3?(100, 354224848179261915075).to_s
-  puts "Test 3: " + test_problem3?(1, 1).to_s
-  puts "Test 4: " + test_problem3?(2, 1).to_s
+  puts "Test 1: " + test(55) { fib(10) }.to_s
+  puts "Test 2: " + test(354224848179261915075) { fib(100) }.to_s
+  puts "Test 3: " + test(1) { fib(1) }.to_s
+  puts "Test 4: " + test(2) { fib(1) }.to_s
 end
 
 def problem4_tests
   puts "-------------------\n\nProblem 4 - Is a Palindrome:"
-  puts "Test 1: " + test_problem4?("abba", true).to_s
-  puts "Test 2: " + test_problem4?("a", true).to_s
-  puts "Test 3: " + test_problem4?("peach", false).to_s
+  puts "Test 1: " + test(true) { is_palindrome("abba") }.to_s
+  puts "Test 2: " + test(true) { is_palindrome("a") }.to_s
+  puts "Test 3: " + test(false) { is_palindrome("peach") }.to_s
 end
 
 def problem5_tests
   puts "-------------------\n\nProblem 5 - Consecutive Digits:"
-  puts "Test 1: " + test_problem5?(2, false).to_s
-  puts "Test 2: " + test_problem5?(22, true).to_s
-  puts "Test 3: " + test_problem5?(54332, true).to_s
-  puts "Test 4: " + test_problem5?(123454321, false).to_s
+  puts "Test 1: " + test(false) { consecutive_digits(2) }.to_s
+  puts "Test 2: " + test(true) { consecutive_digits(22) }.to_s
+  puts "Test 3: " + test(true) { consecutive_digits(54332) }.to_s
+  puts "Test 4: " + test(false) { consecutive_digits(123454321) }.to_s
 end
 
 def problem6_tests
@@ -191,26 +191,6 @@ def test_problem1?(n, array, expected)
   actual == expected
 end
 
-def test_problem2?(i, expected)
-  actual = fib_array(i)
-  actual == expected
-end
-
-def test_problem3?(i, expected)
-  actual = fib(i)
-  actual == expected
-end
-
-def test_problem4?(s, expected)
-  actual = is_palindrome(s)
-  actual == expected
-end
-
-def test_problem5?(n, expected)
-  actual = consecutive_digits(n)
-  actual == expected
-end
-
 def test_problem6?(x, a, expected)
   actual = insert(x, a)
   actual == expected
@@ -218,6 +198,11 @@ end
 
 def test_problem7?(a, expected)
   actual = insertion_sort(a)
+  actual == expected
+end
+
+def test(expected)
+  actual = yield
   actual == expected
 end
 
