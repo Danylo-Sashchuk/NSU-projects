@@ -51,7 +51,7 @@ end
 
 # Problem 5
 # Treating the input as a number
-def consecutive_digits_(n)
+def consecutive_digits(n)
   previous_digit = n % 10
   n /= 10
   while n != 0 do
@@ -73,7 +73,7 @@ def consecutive_digits_s(n)
 end
 
 # Using method .each_cons
-def consecutive_digits(n)
+def consecutive_digits_e(n)
   s = n.to_s.chars
   s.each_cons(2) do |a, b|
     return true if a == b
@@ -139,10 +139,15 @@ def fact2(n)
   n * fact2(n - 1)
 end
 
-# Third Approach - Recursive with Accumulator
+# Third Approach - Recursive With Accumulator
 def fact3(n, accumulator = 1)
   return accumulator if n <= 1
   fact3(n - 1, n * accumulator)
+end
+
+# Fourth Approach - Using Built-In Method
+def fact4(n)
+  (1..n).reduce(1, :*)
 end
 
 # test functions
@@ -217,6 +222,8 @@ def problem8_tests
   puts "Test 4: " + testing?(815915283247897734345611269596115894272000000000) { fact2(40) }.to_s
   puts "Test 5: " + testing?(120) { fact3(5) }.to_s
   puts "Test 6: " + testing?(815915283247897734345611269596115894272000000000) { fact3(40) }.to_s
+  puts "Test 7: " + testing?(120) { fact4(5) }.to_s
+  puts "Test 8: " + testing?(815915283247897734345611269596115894272000000000) { fact4(40) }.to_s
 end
 
 def testing?(expected)

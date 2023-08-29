@@ -30,3 +30,6 @@ def call1
 end
 
 call1 { puts 'hello world' }
+
+a = [9, 10, 15]
+print b
