@@ -51,8 +51,7 @@ end
 
 # Problem 5
 # Treating the input as a number
-def consecutive_digits1(n)
-  return false if n / 10 == 0
+def consecutive_digits_(n)
   previous_digit = n % 10
   n /= 10
   while n != 0 do
@@ -65,12 +64,55 @@ def consecutive_digits1(n)
 end
 
 # Treating the input as a string
-def consecutive_digits(n)
+def consecutive_digits_s(n)
   s = n.to_s
   for i in 0...s.length - 1 do
     return true if s[i] == s[i + 1]
   end
   false
+end
+
+# Using method .each_cons
+def consecutive_digits(n)
+  s = n.to_s.chars
+  s.each_cons(2) do |a, b|
+    return true if a == b
+  end
+  false
+end
+
+# Problem 6
+# O(n) Approach
+def insert1(x, a)
+  index = a.size
+  for i in 0...a.size do
+    if a[i] > x
+      index = i
+      break
+    end
+  end
+  a.slice(0, index) + [x] + a.slice(index, a.size)
+end
+
+# O(LogN) Approach Using Binary Search
+def insert(x, a)
+  low, high = 0, a.size - 1
+  index = -1
+  while low <= high
+    mid = (low + high) / 2
+    if a[mid] < x
+      low = mid + 1
+    elsif a[mid] > x
+      high = mid - 1
+    else
+      index = mid
+      break
+    end
+  end
+  if index == -1
+    index = low
+  end
+  a.slice(0, index) + [x] + a.slice(index, a.size)
 end
 
 # test functions
@@ -109,7 +151,16 @@ def problem5_tests
   puts "Test 1: " + test_problem5?(2, false).to_s
   puts "Test 2: " + test_problem5?(22, true).to_s
   puts "Test 3: " + test_problem5?(54332, true).to_s
-  puts "Test 3: " + test_problem5?(123454321, false).to_s
+  puts "Test 4: " + test_problem5?(123454321, false).to_s
+end
+
+def problem6_tests
+  puts "-------------------\n\nProblem 6 - Insert:"
+  array = [2, 4, 5, 9, 12]
+  puts "Test 1: " + test_problem6?(5, array, [2, 4, 5, 5, 9, 12]).to_s
+  puts "Test 2: " + test_problem6?(10, array, [2, 4, 5, 9, 10, 12]).to_s
+  puts "Test 3: " + test_problem6?(20, array, [2, 4, 5, 9, 12, 20]).to_s
+  puts "Test 4: " + (array == [2, 4, 5, 9, 12]).to_s
 end
 
 def test_problem1?(n, array, expected)
@@ -137,9 +188,15 @@ def test_problem5?(n, expected)
   actual == expected
 end
 
+def test_problem6?(x, a, expected)
+  actual = insert(x, a)
+  actual == expected
+end
+
 # run tests
 problem1_tests
 problem2_tests
 problem3_tests
 problem4_tests
 problem5_tests
+problem6_tests
