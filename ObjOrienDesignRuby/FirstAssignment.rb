@@ -95,23 +95,22 @@ def insert1(x, a)
 end
 
 # O(LogN) Approach Using Binary Search
-def insert(x, a)
+def insert_bs(x, a)
   low, high = 0, a.size - 1
-  index = -1
   while low <= high
     mid = (low + high) / 2
     if a[mid] < x
       low = mid + 1
-    elsif a[mid] > x
-      high = mid - 1
     else
-      index = mid
-      break
+      high = mid - 1
     end
   end
-  if index == -1
-    index = low
-  end
+  a.slice(0, low) + [x] + a.slice(low, a.size)
+end
+
+# Using Built-in Binary Search
+def insert_bs2(x, a)
+  index = a.bsearch_index { |num| num > x } || a.size
   a.slice(0, index) + [x] + a.slice(index, a.size)
 end
 
