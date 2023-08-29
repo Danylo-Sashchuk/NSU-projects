@@ -95,7 +95,7 @@ def insert1(x, a)
 end
 
 # O(LogN) Approach Using Binary Search
-def insert_bs(x, a)
+def insert(x, a)
   low, high = 0, a.size - 1
   while low <= high
     mid = (low + high) / 2
@@ -109,10 +109,12 @@ def insert_bs(x, a)
 end
 
 # Using Built-in Binary Search
-def insert_bs2(x, a)
+def insert_bs(x, a)
   index = a.bsearch_index { |num| num > x } || a.size
   a.slice(0, index) + [x] + a.slice(index, a.size)
 end
+
+def insertion_sort(a) end
 
 # test functions
 def problem1_tests
@@ -162,6 +164,22 @@ def problem6_tests
   puts "Test 4: " + (array == [2, 4, 5, 9, 12]).to_s
 end
 
+def problem7_tests
+  puts "-------------------\n\nProblem 7 - Insert Sort:"
+  array = [30, 81, 43, 95, 24, 38, 64, 56, 74, 70, 33, 60]
+  puts "Test 1: " + test_problem7?(array, [24, 30, 33, 38, 43, 56, 60, 64, 70, 74, 81, 95]).to_s
+  puts "Test 2: " + (array == [30, 81, 43, 95, 24, 38, 64, 56, 74, 70, 33, 60]).to_s
+  array = [10, -1, 5, 100, 8, 10]
+  puts "Test 3: " + test_problem7?(array, [-1, 5, 8, 10, 10, 100]).to_s
+  puts "Test 4: " + (array == [10, -1, 5, 100, 8, 10]).to_s
+  array = [1]
+  puts "Test 5: " + test_problem7?(array, [1]).to_s
+  puts "Test 6: " + (array == [1]).to_s
+  array = []
+  puts "Test 7: " + test_problem7?(array, []).to_s
+  puts "Test 8: " + (array == []).to_s
+end
+
 def test_problem1?(n, array, expected)
   actual = duple(n, array)
   actual == expected
@@ -189,6 +207,11 @@ end
 
 def test_problem6?(x, a, expected)
   actual = insert(x, a)
+  actual == expected
+end
+
+def test_problem7?(a, expected)
+  actual = insertion_sort(a)
   actual == expected
 end
 
