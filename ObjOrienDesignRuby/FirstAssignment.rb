@@ -126,82 +126,67 @@ end
 def problem1_tests
   array = [1, 2, 3]
   puts "Problem 1 - Array Duplication: "
-  puts "Test 1: " + test([1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3]) { duple(4, array) }.to_s
-  puts "Test 1: " + test([1, 2, 3]) { duple(1, array) }.to_s
-  puts "Test 1: " + test([]) { duple(0, array) }.to_s
+  puts "Test 1: " + testing([1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3]) { duple(4, array) }.to_s
+  puts "Test 1: " + testing([1, 2, 3]) { duple(1, array) }.to_s
+  puts "Test 1: " + testing([]) { duple(0, array) }.to_s
 end
 
 def problem2_tests
   puts "-------------------\n\nProblem 2 - Fibonacci Array:"
-  puts "Test 1: " + test([1]) { fib_array(1) }.to_s
-  puts "Test 2: " + test([1, 1]) { fib_array(2) }.to_s
-  puts "Test 3: " + test([1, 1, 2, 3, 5, 8, 13, 21, 34, 55]) { fib_array(10) }.to_s
+  puts "Test 1: " + testing([1]) { fib_array(1) }.to_s
+  puts "Test 2: " + testing([1, 1]) { fib_array(2) }.to_s
+  puts "Test 3: " + testing([1, 1, 2, 3, 5, 8, 13, 21, 34, 55]) { fib_array(10) }.to_s
 end
 
 def problem3_tests
   puts "-------------------\n\nProblem 3 - Fibonacci Number:"
-  puts "Test 1: " + test(55) { fib(10) }.to_s
-  puts "Test 2: " + test(354224848179261915075) { fib(100) }.to_s
-  puts "Test 3: " + test(1) { fib(1) }.to_s
-  puts "Test 4: " + test(1) { fib(2) }.to_s
+  puts "Test 1: " + testing(55) { fib(10) }.to_s
+  puts "Test 2: " + testing(354224848179261915075) { fib(100) }.to_s
+  puts "Test 3: " + testing(1) { fib(1) }.to_s
+  puts "Test 4: " + testing(1) { fib(2) }.to_s
 end
 
 def problem4_tests
   puts "-------------------\n\nProblem 4 - Is a Palindrome:"
-  puts "Test 1: " + test(true) { is_palindrome("abba") }.to_s
-  puts "Test 2: " + test(true) { is_palindrome("a") }.to_s
-  puts "Test 3: " + test(false) { is_palindrome("peach") }.to_s
+  puts "Test 1: " + testing(true) { is_palindrome("abba") }.to_s
+  puts "Test 2: " + testing(true) { is_palindrome("a") }.to_s
+  puts "Test 3: " + testing(false) { is_palindrome("peach") }.to_s
 end
 
 def problem5_tests
   puts "-------------------\n\nProblem 5 - Consecutive Digits:"
-  puts "Test 1: " + test(false) { consecutive_digits(2) }.to_s
-  puts "Test 2: " + test(true) { consecutive_digits(22) }.to_s
-  puts "Test 3: " + test(true) { consecutive_digits(54332) }.to_s
-  puts "Test 4: " + test(false) { consecutive_digits(123454321) }.to_s
+  puts "Test 1: " + testing(false) { consecutive_digits(2) }.to_s
+  puts "Test 2: " + testing(true) { consecutive_digits(22) }.to_s
+  puts "Test 3: " + testing(true) { consecutive_digits(54332) }.to_s
+  puts "Test 4: " + testing(false) { consecutive_digits(123454321) }.to_s
 end
 
 def problem6_tests
   puts "-------------------\n\nProblem 6 - Insert:"
   array = [2, 4, 5, 9, 12]
-  puts "Test 1: " + test_problem6?(5, array, [2, 4, 5, 5, 9, 12]).to_s
-  puts "Test 2: " + test_problem6?(10, array, [2, 4, 5, 9, 10, 12]).to_s
-  puts "Test 3: " + test_problem6?(20, array, [2, 4, 5, 9, 12, 20]).to_s
+  puts "Test 1: " + testing([2, 4, 5, 5, 9, 12]) { insert(5, array) }.to_s
+  puts "Test 1: " + testing([2, 4, 5, 9, 10, 12]) { insert(10, array) }.to_s
+  puts "Test 3: " + testing([2, 4, 5, 9, 12, 20]) { insert(20, array) }.to_s
   puts "Test 4: " + (array == [2, 4, 5, 9, 12]).to_s
 end
 
 def problem7_tests
-  puts "-------------------\n\nProblem 7 - Insert Sort:"
+  puts "-------------------\n\nProblem 7 - Insertion Sort:"
   array = [30, 81, 43, 95, 24, 38, 64, 56, 74, 70, 33, 60]
-  puts "Test 1: " + test_problem7?(array, [24, 30, 33, 38, 43, 56, 60, 64, 70, 74, 81, 95]).to_s
+  puts "Test 1: " + testing([24, 30, 33, 38, 43, 56, 60, 64, 70, 74, 81, 95]) { insertion_sort(array) }.to_s
   puts "Test 2: " + (array == [30, 81, 43, 95, 24, 38, 64, 56, 74, 70, 33, 60]).to_s
   array = [10, -1, 5, 100, 8, 10]
-  puts "Test 3: " + test_problem7?(array, [-1, 5, 8, 10, 10, 100]).to_s
+  puts "Test 3: " + testing([-1, 5, 8, 10, 10, 100]) { insertion_sort(array) }.to_s
   puts "Test 4: " + (array == [10, -1, 5, 100, 8, 10]).to_s
   array = [1]
-  puts "Test 5: " + test_problem7?(array, [1]).to_s
+  puts "Test 5: " + testing([1]) { insertion_sort(array) }.to_s
   puts "Test 6: " + (array == [1]).to_s
   array = []
-  puts "Test 7: " + test_problem7?(array, []).to_s
+  puts "Test 7: " + testing([]) { insertion_sort(array) }.to_s
   puts "Test 8: " + (array == []).to_s
 end
 
-def test_problem1?(n, array, expected)
-  actual = duple(n, array)
-  actual == expected
-end
-
-def test_problem6?(x, a, expected)
-  actual = insert(x, a)
-  actual == expected
-end
-
-def test_problem7?(a, expected)
-  actual = insertion_sort(a)
-  actual == expected
-end
-
-def test(expected)
+def testing(expected)
   actual = yield
   actual == expected
 end
