@@ -51,7 +51,7 @@ end
 
 # Problem 5
 # Treating the input as a number
-def consecutive_digits(n)
+def consecutive_digits1(n)
   return false if n / 10 == 0
   previous_digit = n % 10
   n /= 10
@@ -60,6 +60,15 @@ def consecutive_digits(n)
     return true if current_digit == previous_digit
     previous_digit = current_digit
     n /= 10
+  end
+  false
+end
+
+# Treating the input as a string
+def consecutive_digits(n)
+  s = n.to_s
+  for i in 0...s.length - 1 do
+    return true if s[i] == s[i + 1]
   end
   false
 end
