@@ -143,7 +143,7 @@ def problem3_tests
   puts "Test 1: " + test(55) { fib(10) }.to_s
   puts "Test 2: " + test(354224848179261915075) { fib(100) }.to_s
   puts "Test 3: " + test(1) { fib(1) }.to_s
-  puts "Test 4: " + test(2) { fib(1) }.to_s
+  puts "Test 4: " + test(1) { fib(2) }.to_s
 end
 
 def problem4_tests
