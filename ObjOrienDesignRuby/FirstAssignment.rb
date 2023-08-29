@@ -114,7 +114,13 @@ def insert_bs(x, a)
   a.slice(0, index) + [x] + a.slice(index, a.size)
 end
 
-def insertion_sort(a) end
+def insertion_sort(a)
+  result = []
+  a.each do |i|
+    result = insert(i, result)
+  end
+  result
+end
 
 # test functions
 def problem1_tests
@@ -222,3 +228,4 @@ problem3_tests
 problem4_tests
 problem5_tests
 problem6_tests
+problem7_tests
