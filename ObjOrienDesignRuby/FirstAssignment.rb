@@ -95,7 +95,7 @@ def insert1(x, a)
 end
 
 # O(LogN) Approach Using Binary Search
-def insert(x, a)
+def insert_linear(x, a)
   low, high = 0, a.size - 1
   while low <= high
     mid = (low + high) / 2
@@ -108,13 +108,33 @@ def insert(x, a)
   a.slice(0, low) + [x] + a.slice(low, a.size)
 end
 
+# Recursive Binary Search
+def find_index(x, a, low = 0, high = a.size - 1)
+  return low if low > high
+  mid = low + (high - low) / 2
+  if a[mid] < x
+    find_index(x, a, mid + 1, high)
+  elsif a[mid] > x
+    find_index(x, a, low, mid - 1)
+  else
+    mid
+  end
+end
+
 # Using Built-in Binary Search
 def insert_bs(x, a)
   index = a.bsearch_index { |num| num > x } || a.size
   a.slice(0, index) + [x] + a.slice(index, a.size)
 end
 
+# Insertion Using Recursive Binary Search
+def insert(x, a)
+  index = find_index(x, a)
+  a.slice(0, index) + [x] + a.slice(index, a.size)
+end
+
 # Problem 7
+# Iterative Approach
 def insertion_sort(a)
   result = []
   a.each do |i|
