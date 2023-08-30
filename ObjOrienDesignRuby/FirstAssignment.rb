@@ -233,13 +233,13 @@ def problem7_tests
   puts "Test 2: " + testing?([30, 81, 43, 95, 24, 38, 64, 56, 74, 70, 33, 60]) { array }.to_s
   array = [10, -1, 5, 100, 8, 10]
   puts "Test 3: " + testing?([-1, 5, 8, 10, 10, 100]) { insertion_sort(array) }.to_s
-  puts "Test 4: " + (array == [10, -1, 5, 100, 8, 10]).to_s
+  puts "Test 4: " + testing?([10, -1, 5, 100, 8, 10]) { array }.to_s
   array = [1]
   puts "Test 5: " + testing?([1]) { insertion_sort(array) }.to_s
-  puts "Test 6: " + (array == [1]).to_s
+  puts "Test 6: " + testing?([1]) { array }.to_s
   array = []
   puts "Test 7: " + testing?([]) { insertion_sort(array) }.to_s
-  puts "Test 8: " + (array == []).to_s
+  puts "Test 8: " + testing?([]) { array }.to_s
 end
 
 def problem8_tests
