@@ -1,3 +1,6 @@
+RESET = "\e[0m"
+FAIL = "\e[31m"
+PASS = "\e[32m"
 # Problem 1
 def duple(n, a)
   result = Array.new
@@ -33,20 +36,20 @@ def fib(n)
 end
 
 # Problem 4
-# Two Pointer Approach
+# Recursive Approach
+def is_palindrome(s)
+  return true if s.length <= 1
+  return is_palindrome(s[1...s.length - 1]) if s[0] == s[s.length - 1]
+  false
+end
+
+# Two Pointers Approach
 def is_palindrome_iterative?(s)
   left, right = 0, s.length - 1
   while left < right do
     return false if s[left += 1] != s[right -= 1]
   end
   true
-end
-
-# Recursive Approach
-def is_palindrome(s)
-  return true if s.length <= 1
-  return is_palindrome(s[1...s.length - 1]) if s[0] == s[s.length - 1]
-  false
 end
 
 # Problem 5
@@ -64,7 +67,7 @@ def consecutive_digits(n)
 end
 
 # Treating the input as a string
-def consecutive_digits_s(n)
+def consecutive_digits1(n)
   s = n.to_s
   for i in 0...s.length - 1 do
     return true if s[i] == s[i + 1]
@@ -73,7 +76,7 @@ def consecutive_digits_s(n)
 end
 
 # Using method .each_cons
-def consecutive_digits_e(n)
+def consecutive_digits2(n)
   s = n.to_s.chars
   s.each_cons(2) do |a, b|
     return true if a == b
@@ -155,7 +158,7 @@ end
 
 # Second Approach - Recursive
 def fact2(n)
-  return n if n == 1
+  return 1 if n <= 1
   n * fact2(n - 1)
 end
 
@@ -170,13 +173,18 @@ def fact4(n)
   (1..n).reduce(1, :*)
 end
 
+# Fifth - Math.gamma. However, does not pass the test
+def fact5(n)
+  Math.gamma(n + 1).to_i
+end
+
 # test functions
 def problem1_tests
   array = [1, 2, 3]
   puts "Problem 1 - Array Duplication: "
   puts "Test 1: " + testing?([1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3]) { duple(4, array) }.to_s
-  puts "Test 1: " + testing?([1, 2, 3]) { duple(1, array) }.to_s
-  puts "Test 1: " + testing?([]) { duple(0, array) }.to_s
+  puts "Test 2: " + testing?([1, 2, 3]) { duple(1, array) }.to_s
+  puts "Test 3: " + testing?([]) { duple(0, array) }.to_s
 end
 
 def problem2_tests
@@ -215,14 +223,14 @@ def problem6_tests
   puts "Test 1: " + testing?([2, 4, 5, 5, 9, 12]) { insert(5, array) }.to_s
   puts "Test 1: " + testing?([2, 4, 5, 9, 10, 12]) { insert(10, array) }.to_s
   puts "Test 3: " + testing?([2, 4, 5, 9, 12, 20]) { insert(20, array) }.to_s
-  puts "Test 4: " + (array == [2, 4, 5, 9, 12]).to_s
+  puts "Test 4: " + testing?([2, 4, 5, 9, 12]) { array }.to_s
 end
 
 def problem7_tests
   puts "-------------------\n\nProblem 7 - Insertion Sort:"
   array = [30, 81, 43, 95, 24, 38, 64, 56, 74, 70, 33, 60]
   puts "Test 1: " + testing?([24, 30, 33, 38, 43, 56, 60, 64, 70, 74, 81, 95]) { insertion_sort(array) }.to_s
-  puts "Test 2: " + (array == [30, 81, 43, 95, 24, 38, 64, 56, 74, 70, 33, 60]).to_s
+  puts "Test 2: " + testing?([30, 81, 43, 95, 24, 38, 64, 56, 74, 70, 33, 60]) { array }.to_s
   array = [10, -1, 5, 100, 8, 10]
   puts "Test 3: " + testing?([-1, 5, 8, 10, 10, 100]) { insertion_sort(array) }.to_s
   puts "Test 4: " + (array == [10, -1, 5, 100, 8, 10]).to_s
@@ -238,17 +246,28 @@ def problem8_tests
   puts "-------------------\n\nProblem 8 - Factorial:"
   puts "Test 1: " + testing?(120) { fact(5) }.to_s
   puts "Test 2: " + testing?(815915283247897734345611269596115894272000000000) { fact(40) }.to_s
-  puts "Test 3: " + testing?(120) { fact2(5) }.to_s
-  puts "Test 4: " + testing?(815915283247897734345611269596115894272000000000) { fact2(40) }.to_s
-  puts "Test 5: " + testing?(120) { fact3(5) }.to_s
-  puts "Test 6: " + testing?(815915283247897734345611269596115894272000000000) { fact3(40) }.to_s
-  puts "Test 7: " + testing?(120) { fact4(5) }.to_s
-  puts "Test 8: " + testing?(815915283247897734345611269596115894272000000000) { fact4(40) }.to_s
+  puts "Test 3: " + testing?(1) { fact(0) }.to_s
+  puts "Test 4: " + testing?(120) { fact2(5) }.to_s
+  puts "Test 5: " + testing?(815915283247897734345611269596115894272000000000) { fact2(40) }.to_s
+  puts "Test 6: " + testing?(1) { fact2(0) }.to_s
+  puts "Test 7: " + testing?(120) { fact3(5) }.to_s
+  puts "Test 8: " + testing?(815915283247897734345611269596115894272000000000) { fact3(40) }.to_s
+  puts "Test 9: " + testing?(1) { fact3(0) }.to_s
+  puts "Test 10: " + testing?(120) { fact4(5) }.to_s
+  puts "Test 11: " + testing?(815915283247897734345611269596115894272000000000) { fact4(40) }.to_s
+  puts "Test 12: " + testing?(1) { fact4(0) }.to_s
+  puts "Test 13: " + testing?(120) { fact5(5) }.to_s
+  puts "Test 14: " + testing?(815915283247897734345611269596115894272000000000) { fact5(40) }.to_s # always fail because of math method
+  puts "Test 15: " + testing?(1) { fact5(0) }.to_s
 end
 
 def testing?(expected)
   actual = yield
-  actual == expected
+  if actual == expected
+    "#{PASS} Passed #{RESET}"
+  else
+    "#{FAIL} Failed #{RESET}"
+  end
 end
 
 # run tests
