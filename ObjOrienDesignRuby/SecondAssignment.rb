@@ -40,7 +40,15 @@ class DNA
   end
 
   def frequencies
-
+    frequency = {}
+    @dna.each_char do |char|
+      if frequency.key?(char)
+        frequency[char] += 1
+      else
+        frequency[char] = 1
+      end
+    end
+    frequency
   end
 end
 
@@ -130,6 +138,12 @@ class DNA_Test
         puts e.backtrace
       end
     }
+  end
+
+  def test10
+    dna = DNA.new("ATTGCC")
+    expected = { "A" => 1, "T" => 2, "G" => 1, "C" => 2 }
+    puts "Test 10: " + @test_engine.testing(expected) { dna.frequencies }
   end
 end
 
