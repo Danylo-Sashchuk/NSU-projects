@@ -76,6 +76,9 @@ class TestEngine
 end
 
 class DNA_Test
+  test_cases = [
+    { :name => "Test 1", :block => -> (a) { puts a } }
+  ]
 
   def test1
     dna = DNA.new("ATTGCC")
