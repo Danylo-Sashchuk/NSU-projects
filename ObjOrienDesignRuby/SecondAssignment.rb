@@ -50,6 +50,10 @@ class DNA
     end
     frequency
   end
+
+  def ==(other)
+    @dna.to_s == other.to_s
+  end
 end
 
 # Class with static methods for convenient testing
@@ -144,6 +148,23 @@ class DNA_Test
     setup
     expected = { "A" => 1, "T" => 2, "G" => 1, "C" => 2 }
     puts "Test 10: " + TestEngine.testing(expected) { dna.frequencies }
+  end
+
+  def test11
+    setup
+    dna2 = DNA.new(dna)
+    puts "Test 11: " + TestEngine.testing(true) { dna.to_s == dna2.to_s }
+  end
+
+  def test12
+    setup
+    dna2 = DNA.new(dna)
+    puts "Test 12: " + TestEngine.testing(true) { dna == dna2 }
+  end
+
+  def test13
+    setup
+
   end
 end
 
