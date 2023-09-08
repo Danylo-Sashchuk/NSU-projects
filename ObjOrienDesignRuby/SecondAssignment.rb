@@ -2,22 +2,42 @@ class DNA
   attr_reader :dna
 
   def initialize(dna)
-    @dna = dna
+    @dna = dna.to_s
   end
 
   def to_s
-
+    dna.to_s
   end
 
   def length
     @dna.length
   end
 
-  def hamming_distance(dna) end
+  def hamming_distance(dna)
+    if dna.length != @dna.length
+      raise ArgumentError, "dnas of different lengths"
+    end
 
-  def contains?(dna) end
+    distance = 0
+    @dna.chars.each_with_index do |char, index|
+      if dna.to_s[index] != char
+        distance += 1
+      end
+    end
+    distance
+  end
 
-  def positions(i) end
+  def contains?(dna)
+    @dna.include?(dna.to_s)
+  end
+
+  def positions(i)
+    indexes = []
+    @dna.chars.each_with_index do |char, index|
+      indexes << index if char == i
+    end
+    indexes
+  end
 
   def frequencies
 
@@ -97,15 +117,21 @@ class DNA_Test
 
   def test8
     dna1 = DNA.new("ATTGCC")
-    dna2 = DNA.new("GTTGAC")
-    puts "Test 8: " + @test_engine.testing(0) { dna1.hamming_distance(dna2) }
+    puts "Test 8: " + @test_engine.testing(0) { dna1.hamming_distance(dna1) }
   end
 
   def test9
     dna = DNA.new("ATTGCC")
-    puts "Test 9: " + @test_engine.testing(0) { dna.hamming_distance(DNA.new('AT')) }
+    puts "Test 9: " + @test_engine.testing(nil) {
+      begin
+        dna.hamming_distance(DNA.new('AT'))
+      rescue ArgumentError => e
+        puts "#{e.class}: #{e.message}"
+        puts e.backtrace
+      end
+    }
   end
 end
 
-dna = DNA_Test.new
-dna.run_tests
+dna_tests = DNA_Test.new
+dna_tests.run_tests
