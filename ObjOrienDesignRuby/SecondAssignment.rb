@@ -69,63 +69,67 @@ class TestEngine
 
   # Method for searching and running test methods in a class
   def self.run_tests(clazz)
+    puts("Run tests in #{clazz.class.name.to_s}:")
     methods = clazz.methods.select { |method_name| method_name.to_s.match(/^test\d+/) }
     methods = methods.sort_by { |method_name| method_name.to_s[/\d+/].to_i }
     methods.each { |method| clazz.send(method) }
+    puts("-------\n")
   end
 end
 
 class DNA_Test
-  test_cases = [
-    { :name => "Test 1", :block => -> (a) { puts a } }
-  ]
+  attr_accessor :dna
+
+  def setup
+    @dna = DNA.new("ATTGCC")
+  end
 
   def test1
-    dna = DNA.new("ATTGCC")
+    setup
     puts "Test 1: " + TestEngine.testing(6) { dna.length }
   end
 
   def test2
-    dna = DNA.new("ATTGCC")
+    setup
     puts "Test 2: " + TestEngine.testing("ATTGCC") { dna.to_s }
   end
 
   def test3
-    dna = DNA.new("ATTGCC")
+    setup
     another_dna = DNA.new("TGC")
     puts "Test 3: " + TestEngine.testing(true) { dna.contains?(another_dna) }
   end
 
   def test4
-    dna = DNA.new("ATTGCC")
+    setup
     another_dna = DNA.new("AT")
     puts "Test 4: " + TestEngine.testing(true) { dna.contains?(another_dna) }
   end
 
   def test5
-    dna = DNA.new("ATTGCC")
+    setup
     another_dna = "GG"
     puts "Test 5: " + TestEngine.testing(false) { dna.contains?(another_dna) }
   end
 
   def test6
-    dna = DNA.new("ATTGCC")
+    setup
     puts "Test 6: " + TestEngine.testing([1, 2]) { dna.positions("T") }
   end
 
   def test7
-    dna1 = DNA.new("ATTGCC")
+    setup
     dna2 = DNA.new("GTTGAC")
-    puts "Test 7: " + TestEngine.testing(2) { dna1.hamming_distance(dna2) }
+    puts "Test 7: " + TestEngine.testing(2) { dna.hamming_distance(dna2) }
   end
 
   def test8
-    dna1 = DNA.new("ATTGCC")
-    puts "Test 8: " + TestEngine.testing(0) { dna1.hamming_distance(dna1) }
+    setup
+    puts "Test 8: " + TestEngine.testing(0) { dna.hamming_distance(dna) }
   end
 
   def test9
-    dna = DNA.new("ATTGCC")
+    setup
     puts "Test 9: " + TestEngine.testing(nil) {
       begin
         dna.hamming_distance(DNA.new('AT'))
@@ -137,7 +141,7 @@ class DNA_Test
   end
 
   def test10
-    dna = DNA.new("ATTGCC")
+    setup
     expected = { "A" => 1, "T" => 2, "G" => 1, "C" => 2 }
     puts "Test 10: " + TestEngine.testing(expected) { dna.frequencies }
   end

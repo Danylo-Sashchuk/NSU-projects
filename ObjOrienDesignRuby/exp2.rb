@@ -50,11 +50,10 @@ hello2.talk('Mike') # Hello again Mike
 hello.talk
 
 test_cases = [
-  { :name => "Test 1", :block => -> (a){ puts "asd" + a } },
-  { :name => "Test 2", :block => -> { puts "qwe" } }
+  { :name => "Test 1", :expected => 6, :block => -> { dna.length } }
 ]
 
 test_cases.each do |x|
-  puts "Running #{x[:name]}..."
+  dna = "asd"
   x[:block].call
 end
