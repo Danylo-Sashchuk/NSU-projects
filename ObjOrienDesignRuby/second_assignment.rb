@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DNA
   attr_reader :dna
 
@@ -27,10 +29,10 @@ class DNA
     @dna.include?(dna.to_s)
   end
 
-  def positions(i)
+  def positions(nucleotide)
     indexes = []
     @dna.chars.each_with_index do |char, index|
-      indexes << index if char == i
+      indexes << index if char == nucleotide
     end
     indexes
   end
@@ -94,7 +96,6 @@ class SumInteger
         operands = 'Bad input!'
         break
       end
-
     end
     operands
   end
@@ -124,9 +125,9 @@ end
 
 # Class with static methods for convenient testing
 class TestEngine
-  RESET = "\e[0m"
-  FAIL = "\e[31m"
-  PASS = "\e[32m"
+  RESET = "\e[0m".freeze
+  FAIL = "\e[31m".freeze
+  PASS = "\e[32m".freeze
 
   def self.testing(expected)
     actual = yield
@@ -157,82 +158,80 @@ class DNA_Test
 
   def test1
     setup
-    puts 'Test 1: ' + TestEngine.testing(6) { @dna.length }
+    puts "Test 1: #{TestEngine.testing(6) { @dna.length }}"
   end
 
   def test2
     setup
-    puts 'Test 2: ' + TestEngine.testing('ATTGCC') { @dna.to_s }
+    puts "Test 2: #{TestEngine.testing('ATTGCC') { @dna.to_s }}"
   end
 
   def test3
     setup
     another_dna = DNA.new('TGC')
-    puts 'Test 3: ' + TestEngine.testing(true) { @dna.contains?(another_dna) }
+    puts "Test 3: #{TestEngine.testing(true) { @dna.contains?(another_dna) }}"
   end
 
   def test4
     setup
     another_dna = DNA.new('AT')
-    puts 'Test 4: ' + TestEngine.testing(true) { @dna.contains?(another_dna) }
+    puts "Test 4: #{TestEngine.testing(true) { @dna.contains?(another_dna) }}"
   end
 
   def test5
     setup
     another_dna = 'GG'
-    puts 'Test 5: ' + TestEngine.testing(false) { @dna.contains?(another_dna) }
+    puts "Test 5: #{TestEngine.testing(false) { @dna.contains?(another_dna) }}"
   end
 
   def test6
     setup
-    puts 'Test 6: ' + TestEngine.testing([1, 2]) { @dna.positions('T') }
+    puts "Test 6: #{TestEngine.testing([1, 2]) { @dna.positions('T') }}"
   end
 
   def test7
     setup
     dna2 = DNA.new('GTTGAC')
-    puts 'Test 7: ' + TestEngine.testing(2) { @dna.hamming_distance(dna2) }
+    puts "Test 7: #{TestEngine.testing(2) { @dna.hamming_distance(dna2) }}"
   end
 
   def test8
     setup
-    puts 'Test 8: ' + TestEngine.testing(0) { @dna.hamming_distance(@dna) }
+    puts "Test 8: #{TestEngine.testing(0) { @dna.hamming_distance(@dna) }}"
   end
 
   def test9
     setup
-    puts 'Test 9: ' + TestEngine.testing(nil) {
-      begin
-        @dna.hamming_distance(DNA.new('AT'))
-      rescue ArgumentError => e
-        puts "#{e.class}: #{e.message}"
-        puts e.backtrace
-      end
-    }
+    puts "Test 9: #{TestEngine.testing(nil)}" do
+      @dna.hamming_distance(DNA.new('AT'))
+    rescue ArgumentError => e
+      puts "#{e.class}: #{e.message}"
+      puts e.backtrace
+    end
   end
 
   def test10
     setup
     expected = { 'A' => 1, 'T' => 2, 'G' => 1, 'C' => 2 }
-    puts 'Test 10: ' + TestEngine.testing(expected) { @dna.frequencies }
+    puts "Test 10: #{TestEngine.testing(expected) { @dna.frequencies }}"
   end
 
   def test11
     setup
     dna2 = DNA.new(@dna)
-    puts 'Test 11: ' + TestEngine.testing(true) { @dna.to_s == dna2.to_s }
+    puts "Test 11: #{TestEngine.testing(true) { @dna.to_s == dna2.to_s }}"
   end
 
   def test12
     setup
     dna2 = DNA.new(dna)
-    puts 'Test 12: ' + TestEngine.testing(true) { @dna == dna2 }
+    puts "Test 12: #{TestEngine.testing(true) { @dna == dna2 }}"
   end
 
   def test13
     setup
     sample = 'CA'
-    puts 'Test 13: ' + TestEngine.testing(false) { @dna.contains?(sample) }
+    puts "Test 13: #{TestEngine.testing(false) { @dna.contains?(sample) }}"
   end
 end
 
