@@ -81,6 +81,27 @@ class SumInteger
   end
 end
 
+class PolishNotation
+  def run
+    puts "Hello!\nLet's do some calculations, shall we?"
+    elements = []
+    while elements[0].to_s != "quit" do
+      print "Write the expression in Reverse Polish Notation: "
+      elements = gets.chomp.split
+      operands = []
+      elements.each do |i|
+        begin
+          number = Integer(i)
+          result += number
+        rescue ArgumentError
+          result = "Bad input!"
+          break
+        end
+      end
+    end
+  end
+end
+
 # Class with static methods for convenient testing
 class TestEngine
   RESET = "\e[0m"
