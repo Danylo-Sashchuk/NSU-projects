@@ -58,67 +58,70 @@ class DNA
 end
 
 class SumInteger
-  def run
-    puts "Hello!\nLet sum some numbers, shall we?"
-    items = []
-    while items[0].to_s != "quit" do
-      print "Enter the numbers: "
-      input = gets.chomp
-      items = input.split
-      result = 0
-      items.each do |i|
-        begin
-          number = Integer(i)
-          result += number
-        rescue ArgumentError
-          result = "Bad input!"
-          break
-        end
-      end
-      puts result
-    end
-    puts "Bye!"
-  end
-end
-
-class PolishNotation
   attr_accessor :operators
 
   def initialize
     @operators = { "+" => "+", "-" => "-", "*" => "*", "/" => "/" }
   end
 
-  def run
-    puts "Hello!\nLet's do some calculations, shall we?"
-    elements = []
-    while elements[0].to_s != "quit" do
-      print "Write the expression in Reverse Polish Notation: "
-      elements = gets.chomp.split
-      operands = []
-      elements.each do |i|
-        begin
-          operands << Integer(i)
-        rescue ArgumentError
-          if @operators.key?(i)
-            int1 = operands.pop
-            int2 = operands.pop
-            case i
-            when "+"
-              operands << int1 + int2
-            when "-"
-              operands << int1 - int2
-            when "*"
-              operands << int1 * int2
-            when "/"
-              operands << int1 / int2
-            else
-              puts "Bad input!"
-              break
-            end
+  def get_input
+    print "Write the expression in Reverse Polish Notation (or 'quit' to exit): "
+    gets.chomp.split
+  end
+
+  def exit?(input)
+    if input[0].to_s.downcase == "quit"
+      puts "Bye!"
+      true
+    else
+      false
+    end
+  end
+
+  def evaluate_expression(input)
+    operands = []
+    input.each do |element|
+      begin
+        operands << Integer(element)
+      rescue ArgumentError
+        if @operators.key?(element)
+          int1 = operands.pop
+          int2 = operands.pop
+          case element
+          when "+"
+            operands << int1 + int2
+          when "-"
+            operands << int1 - int2
+          when "*"
+            operands << int1 * int2
+          when "/"
+            operands << int1 / int2
+          else
+            operands = "Bad input!"
+            break
           end
         end
       end
-      puts "The answer is: #{operands[0]}"
+    end
+    operands
+  end
+
+  def print_answer(result)
+    if result.to_s == "Bad input!"
+      puts result.to_s
+    else
+      puts "The answer is: #{result[0]}"
+    end
+  end
+
+  def run
+    puts "Hello!\nLet's do some calculations, shall we?"
+    loop do
+      input = get_input
+      break if exit?(input)
+
+      result = evaluate_expression(input)
+      print_answer(result)
     end
   end
 end
@@ -148,6 +151,7 @@ class TestEngine
   end
 end
 
+# Test class
 class DNA_Test
   attr_accessor :dna
 
@@ -237,5 +241,5 @@ class DNA_Test
 end
 
 # TestEngine.run_tests(DNA_Test.new)
-sum = PolishNotation.new
+sum = SumInteger.new
 sum.run
