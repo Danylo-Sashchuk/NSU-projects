@@ -96,10 +96,10 @@ class SumInteger
             operands << int1 * int2
           when "/"
             operands << int1 / int2
-          else
-            operands = "Bad input!"
-            break
           end
+        else
+          operands = "Bad input!"
+          break
         end
       end
     end
