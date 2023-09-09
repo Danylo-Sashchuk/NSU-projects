@@ -82,6 +82,12 @@ class SumInteger
 end
 
 class PolishNotation
+  attr_accessor :operators
+
+  def initialize
+    @operators = { "+" => "+", "-" => "-", "*" => "*", "/" => "/" }
+  end
+
   def run
     puts "Hello!\nLet's do some calculations, shall we?"
     elements = []
@@ -91,13 +97,28 @@ class PolishNotation
       operands = []
       elements.each do |i|
         begin
-          number = Integer(i)
-          result += number
+          operands << Integer(i)
         rescue ArgumentError
-          result = "Bad input!"
-          break
+          if @operators.key?(i)
+            int1 = operands.pop
+            int2 = operands.pop
+            case i
+            when "+"
+              operands << int1 + int2
+            when "-"
+              operands << int1 - int2
+            when "*"
+              operands << int1 * int2
+            when "/"
+              operands << int1 / int2
+            else
+              puts "Bad input!"
+              break
+            end
+          end
         end
       end
+      puts "The answer is: #{operands[0]}"
     end
   end
 end
@@ -216,5 +237,5 @@ class DNA_Test
 end
 
 # TestEngine.run_tests(DNA_Test.new)
-sum = SumInteger.new
-print sum.run
+sum = PolishNotation.new
+sum.run
