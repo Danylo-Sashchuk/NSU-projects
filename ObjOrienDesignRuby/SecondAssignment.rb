@@ -14,15 +14,11 @@ class DNA
   end
 
   def hamming_distance(dna)
-    if dna.length != @dna.length
-      raise ArgumentError, "dnas of different lengths"
-    end
+    raise ArgumentError, 'dnas of different lengths' if dna.length != @dna.length
 
     distance = 0
     @dna.chars.each_with_index do |char, index|
-      if dna.to_s[index] != char
-        distance += 1
-      end
+      distance += 1 if dna.to_s[index] != char
     end
     distance
   end
@@ -61,7 +57,7 @@ class SumInteger
   attr_accessor :operators
 
   def initialize
-    @operators = { "+" => "+", "-" => "-", "*" => "*", "/" => "/" }
+    @operators = { '+' => '+', '-' => '-', '*' => '*', '/' => '/' }
   end
 
   def get_input
@@ -70,8 +66,8 @@ class SumInteger
   end
 
   def exit?(input)
-    if input[0].to_s.downcase == "quit"
-      puts "Bye!"
+    if input[0].to_s.downcase == 'quit'
+      puts 'Bye!'
       true
     else
       false
@@ -81,34 +77,34 @@ class SumInteger
   def evaluate_expression(input)
     operands = []
     input.each do |element|
-      begin
-        operands << Integer(element)
-      rescue ArgumentError
-        if @operators.key?(element)
-          int1 = operands.pop
-          int2 = operands.pop
-          case element
-          when "+"
-            operands << int1 + int2
-          when "-"
-            operands << int1 - int2
-          when "*"
-            operands << int1 * int2
-          when "/"
-            operands << int1 / int2
-          end
-        else
-          operands = "Bad input!"
-          break
-        end
+      operands << Integer(element)
+    rescue ArgumentError
+      int1 = operands.pop
+      int2 = operands.pop
+      case element
+      when '+'
+        operands << int1 + int2
+      when '-'
+        operands << int1 - int2
+      when '*'
+        operands << int1 * int2
+      when '/'
+        operands << int1 / int2
+      else
+        operands = 'Bad input!'
+        break
       end
+
     end
     operands
   end
 
+  def apply_operator
+  end
+
   def print_answer(result)
-    if result.to_s == "Bad input!"
-      puts result.to_s
+    if result.to_s == 'Bad input!'
+      puts result
     else
       puts "The answer is: #{result[0]}"
     end
@@ -143,7 +139,7 @@ class TestEngine
 
   # Method for searching and running test methods in a class
   def self.run_tests(clazz)
-    puts("Run tests in #{clazz.class.name.to_s}:")
+    puts("Run tests in #{clazz.class.name}:")
     methods = clazz.methods.select { |method_name| method_name.to_s.match(/^test\d+/) }
     methods = methods.sort_by { |method_name| method_name.to_s[/\d+/].to_i }
     methods.each { |method| clazz.send(method) }
@@ -156,56 +152,56 @@ class DNA_Test
   attr_accessor :dna
 
   def setup
-    @dna = DNA.new("ATTGCC")
+    @dna = DNA.new('ATTGCC')
   end
 
   def test1
     setup
-    puts "Test 1: " + TestEngine.testing(6) { @dna.length }
+    puts 'Test 1: ' + TestEngine.testing(6) { @dna.length }
   end
 
   def test2
     setup
-    puts "Test 2: " + TestEngine.testing("ATTGCC") { @dna.to_s }
+    puts 'Test 2: ' + TestEngine.testing('ATTGCC') { @dna.to_s }
   end
 
   def test3
     setup
-    another_dna = DNA.new("TGC")
-    puts "Test 3: " + TestEngine.testing(true) { @dna.contains?(another_dna) }
+    another_dna = DNA.new('TGC')
+    puts 'Test 3: ' + TestEngine.testing(true) { @dna.contains?(another_dna) }
   end
 
   def test4
     setup
-    another_dna = DNA.new("AT")
-    puts "Test 4: " + TestEngine.testing(true) { @dna.contains?(another_dna) }
+    another_dna = DNA.new('AT')
+    puts 'Test 4: ' + TestEngine.testing(true) { @dna.contains?(another_dna) }
   end
 
   def test5
     setup
-    another_dna = "GG"
-    puts "Test 5: " + TestEngine.testing(false) { @dna.contains?(another_dna) }
+    another_dna = 'GG'
+    puts 'Test 5: ' + TestEngine.testing(false) { @dna.contains?(another_dna) }
   end
 
   def test6
     setup
-    puts "Test 6: " + TestEngine.testing([1, 2]) { @dna.positions("T") }
+    puts 'Test 6: ' + TestEngine.testing([1, 2]) { @dna.positions('T') }
   end
 
   def test7
     setup
-    dna2 = DNA.new("GTTGAC")
-    puts "Test 7: " + TestEngine.testing(2) { @dna.hamming_distance(dna2) }
+    dna2 = DNA.new('GTTGAC')
+    puts 'Test 7: ' + TestEngine.testing(2) { @dna.hamming_distance(dna2) }
   end
 
   def test8
     setup
-    puts "Test 8: " + TestEngine.testing(0) { @dna.hamming_distance(@dna) }
+    puts 'Test 8: ' + TestEngine.testing(0) { @dna.hamming_distance(@dna) }
   end
 
   def test9
     setup
-    puts "Test 9: " + TestEngine.testing(nil) {
+    puts 'Test 9: ' + TestEngine.testing(nil) {
       begin
         @dna.hamming_distance(DNA.new('AT'))
       rescue ArgumentError => e
@@ -217,26 +213,26 @@ class DNA_Test
 
   def test10
     setup
-    expected = { "A" => 1, "T" => 2, "G" => 1, "C" => 2 }
-    puts "Test 10: " + TestEngine.testing(expected) { @dna.frequencies }
+    expected = { 'A' => 1, 'T' => 2, 'G' => 1, 'C' => 2 }
+    puts 'Test 10: ' + TestEngine.testing(expected) { @dna.frequencies }
   end
 
   def test11
     setup
     dna2 = DNA.new(@dna)
-    puts "Test 11: " + TestEngine.testing(true) { @dna.to_s == dna2.to_s }
+    puts 'Test 11: ' + TestEngine.testing(true) { @dna.to_s == dna2.to_s }
   end
 
   def test12
     setup
     dna2 = DNA.new(dna)
-    puts "Test 12: " + TestEngine.testing(true) { @dna == dna2 }
+    puts 'Test 12: ' + TestEngine.testing(true) { @dna == dna2 }
   end
 
   def test13
     setup
-    sample = "CA"
-    puts "Test 13: " + TestEngine.testing(false) { @dna.contains?(sample) }
+    sample = 'CA'
+    puts 'Test 13: ' + TestEngine.testing(false) { @dna.contains?(sample) }
   end
 end
 
