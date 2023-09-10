@@ -81,26 +81,33 @@ class SumInteger
     input.each do |element|
       operands << Integer(element)
     rescue ArgumentError
+      # TODO: Add checking for the wrong input
       int1 = operands.pop
       int2 = operands.pop
-      case element
-      when '+'
-        operands << int1 + int2
-      when '-'
-        operands << int1 - int2
-      when '*'
-        operands << int1 * int2
-      when '/'
-        operands << int1 / int2
-      else
-        operands = 'Bad input!'
+      temp_result = apply_operator(int1, int2, element)
+      if temp_result == 'Bad input'
+        operands.clear
         break
+      else
+        operands << temp_result
       end
     end
     operands
   end
 
-  def apply_operator
+  def apply_operator(int1, int2, operator)
+    case operator
+    when '+'
+      int1 + int2
+    when '-'
+      int1 - int2
+    when '*'
+      int1 * int2
+    when '/'
+      int1 / int2
+    else
+      'Bad input!'
+    end
   end
 
   def print_answer(result)
@@ -125,9 +132,9 @@ end
 
 # Class with static methods for convenient testing
 class TestEngine
-  RESET = "\e[0m".freeze
-  FAIL = "\e[31m".freeze
-  PASS = "\e[32m".freeze
+  RESET = "\e[0m"
+  FAIL = "\e[31m"
+  PASS = "\e[32m"
 
   def self.testing(expected)
     actual = yield
@@ -149,7 +156,7 @@ class TestEngine
 end
 
 # Test class
-class DNA_Test
+class DnaTest
   attr_accessor :dna
 
   def setup
@@ -232,6 +239,11 @@ class DNA_Test
     setup
     sample = 'CA'
     puts "Test 13: #{TestEngine.testing(false) { @dna.contains?(sample) }}"
+  end
+end
+
+class CalculatorTest
+  def test1
   end
 end
 
