@@ -76,43 +76,48 @@ class SumInteger
     end
   end
 
+  def is_number?(element)
+    /^-?\d+(\.\d+)?$/.match?(element)
+  end
+
+  def is_operator?(element)
+    %w[+ - * /].include?(element)
+  end
+
+  def has_enough_operands?(operands)
+    operands.size > 1
+  end
+
   def evaluate_expression(input)
     operands = []
     input.each do |element|
-      operands << Integer(element)
-    rescue ArgumentError
-      # TODO: Add checking for the wrong input
-      int1 = operands.pop
-      int2 = operands.pop
-      temp_result = apply_operator(int1, int2, element)
-      if temp_result == 'Bad input'
-        operands.clear
-        break
+      if is_number?(element)
+        operands << element.to_s
+      elsif is_operator?(element) && has_enough_operands?(operands)
+        num1 = operands.pop.to_i
+        num2 = operands.pop.to_i
+        operands << apply_operator(num1, num2, element)
       else
-        operands << temp_result
+        return nil
       end
     end
     operands
   end
 
   def apply_operator(int1, int2, operator)
-    case operator
-    when '+'
-      int1 + int2
-    when '-'
-      int1 - int2
-    when '*'
-      int1 * int2
-    when '/'
-      int1 / int2
-    else
-      'Bad input!'
-    end
+    operators = {
+      "+" => int1 + int2,
+      "-" => int1 - int2,
+      "*" => int1 * int2,
+      "/" => int1 / int2
+    }
+
+    operators[operator]
   end
 
   def print_answer(result)
-    if result.to_s == 'Bad input!'
-      puts result
+    if result == nil || result.size != 1
+      puts "Bad input!"
     else
       puts "The answer is: #{result[0]}"
     end

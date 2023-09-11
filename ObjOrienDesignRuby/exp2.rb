@@ -49,11 +49,21 @@ end
 hello2.talk('Mike') # Hello again Mike
 hello.talk
 
-test_cases = [
-  { :name => "Test 1", :expected => 6, :block => -> { dna.length } }
-]
+# test_cases = [
+#   { :name => "Test 1", :expected => 6, :block => -> { dna.length } }
+# ]
+#
+# test_cases.each do |x|
+#   dna = "asd"
+#   x[:block].call
+# end
 
-test_cases.each do |x|
-  dna = "asd"
-  x[:block].call
-end
+int1 = 1
+int2 = 5
+operators = {
+  '+' => int1 + int2,
+  '-' => int1 - int2,
+  '*' => int1 * int2,
+  '/' => int1 / int2
+}
+puts operators['-']
