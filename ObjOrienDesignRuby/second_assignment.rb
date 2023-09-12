@@ -56,11 +56,6 @@ class DNA
 end
 
 class SumInteger
-  attr_accessor :operators
-
-  def initialize
-    @operators = { '+' => '+', '-' => '-', '*' => '*', '/' => '/' }
-  end
 
   def get_input
     print "Write the expression in Reverse Polish Notation (or 'quit' to exit): "
