@@ -37,7 +37,8 @@ class DNA
     indexes
   end
 
-  # TODO: ask if result hash should contain nucleotide that doesnt appear in dna such as { "A" => 0 }
+  # TODO: IT MUST BE A = 0, CAPITALIZED
+  # ask if result hash should contain nucleotide that doesnt appear in dna such as { "A" => 0 }
   def frequencies
     frequency = {}
     @dna.each_char do |char|
