@@ -59,7 +59,7 @@ end
 class SumInteger
 
   def get_input
-    print "Write the expression in Reverse Polish Notation (or 'quit' to exit): "
+    print "Write an expression in Reverse Polish Notation (or 'quit' to exit): "
     gets.chomp.split
   end
 
