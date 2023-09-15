@@ -58,12 +58,12 @@ hello.talk
 #   x[:block].call
 # end
 
-int1 = 1
-int2 = 5
-operators = {
-  '+' => int1 + int2,
-  '-' => int1 - int2,
-  '*' => int1 * int2,
-  '/' => int1 / int2
-}
-puts operators['-']
+class Calc
+  def sum(int1, int2)
+    int2 + int1
+  end
+end
+
+mass = [Calc.new.method(:sum), 10, 20]
+exp = 30
+puts mass[0].call(mass[1], mass[2])

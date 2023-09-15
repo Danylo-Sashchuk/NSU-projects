@@ -87,10 +87,12 @@ class SumIntegers
   end
 
   def user_input(optional = {})
-    return optional['expression'].split if optional.key?('expression') # hash attributes for convenient unit testing
-
-    print "Write an expression in Reverse Polish Notation (or 'quit' to exit): "
-    gets.chomp.split
+    if optional.key?('expression') # hash attributes for convenient unit testing
+      optional['expression'].split
+    else
+      print "Write an expression in Reverse Polish Notation (or 'quit' to exit): "
+      gets.chomp.split
+    end
   end
 
   def exit?(input)
@@ -473,6 +475,31 @@ class RpnTest
   def test_print_answer3
     setup
     TestEngine.testing('The answer is: 10') { @calculator.answer([10]) }
+  end
+
+  def test_evaluate_expression1
+    setup
+    TestEngine.testing([3]) { @calculator.evaluate_expression(%w[1 2 +]) }
+  end
+
+  def test_evaluate_expression2
+    setup
+    TestEngine.testing([30]) { @calculator.evaluate_expression(%w[1 2 + 10 *]) }
+  end
+
+  def test_evaluate_expression3
+    setup
+    TestEngine.testing(nil) { @calculator.evaluate_expression(%w[1 2 + 10 * -]) }
+  end
+
+  def test_evaluate_expression4
+    setup
+    TestEngine.testing([2]) { @calculator.evaluate_expression(%w[1 2 + 10 * 60 /]) }
+  end
+
+  def test_evaluate_expression5
+    setup
+    TestEngine.testing(nil) { @calculator.evaluate_expression(%w[1 2 + qwerty 10 * 60 /]) }
   end
 end
 
