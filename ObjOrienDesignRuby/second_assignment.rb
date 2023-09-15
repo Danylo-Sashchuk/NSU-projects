@@ -76,10 +76,13 @@ class SumIntegers
     puts "Hello!\nLet's do some calculations, shall we?"
     loop do
       input = user_input
-      break if exit?(input)
+      if exit?(input)
+        puts 'Bye!'
+        break
+      end
 
       result = evaluate_expression(input)
-      print_answer(result)
+      puts answer(result)
     end
   end
 
@@ -91,12 +94,7 @@ class SumIntegers
   end
 
   def exit?(input)
-    if input[0].to_s.downcase == 'quit'
-      puts 'Bye!'
-      true
-    else
-      false
-    end
+    input[0].to_s.downcase == 'quit'
   end
 
   def evaluate_expression(input)
@@ -137,11 +135,11 @@ class SumIntegers
     operators[operator]
   end
 
-  def print_answer(result)
+  def answer(result)
     if result.nil? || result.size != 1
-      puts 'Bad input!'
+      'Bad input!'
     else
-      puts "The answer is: #{result[0]}"
+      "The answer is: #{result[0]}"
     end
   end
 end
@@ -160,9 +158,9 @@ class TestEngine
   def self.testing(expected)
     actual = yield
     if actual == expected
-      print "#{PASS}Passed #{RESET}"
+      "#{PASS}Passed #{RESET}"
     else
-      print "#{FAIL}Failed #{RESET}"
+      "#{FAIL}Failed #{RESET}"
     end
   end
 
@@ -170,13 +168,20 @@ class TestEngine
   def self.run_tests(clazz)
     puts("Run tests in #{clazz.class.name}:")
     methods = clazz.methods.select { |method_name| method_name.to_s.match(/^test\d*_?/) }
-    methods = methods.sort_by { |method_name| method_name.to_s[/\d+/].to_i }
+    methods = sort_methods(methods)
     methods.each do |method|
-      print "#{method}: "
-      clazz.send(method)
-      print "\n"
+      print "#{method}: #{clazz.send(method)}\n"
     end
     puts("-------\n")
+  end
+
+  def self.sort_methods(methods)
+    methods.sort_by do |method_name|
+      match_data = method_name.to_s.match(/^(\D+)(\d*)$/)
+      name_part = match_data[1]
+      number_part = match_data[2].to_i
+      [name_part, number_part]
+    end
   end
 end
 
@@ -190,84 +195,82 @@ class DnaTest
 
   def test1
     setup
-    puts "Test 1: #{TestEngine.testing(6) { @dna.length }}"
+    TestEngine.testing(6) { @dna.length }
   end
 
   def test2
     setup
-    puts "Test 2: #{TestEngine.testing('ATTGCC') { @dna.to_s }}"
+    TestEngine.testing('ATTGCC') { @dna.to_s }
   end
 
   def test3
     setup
     another_dna = DNA.new('TGC')
-    puts "Test 3: #{TestEngine.testing(true) { @dna.contains?(another_dna) }}"
+    TestEngine.testing(true) { @dna.contains?(another_dna) }
   end
 
   def test4
     setup
     another_dna = DNA.new('AT')
-    puts "Test 4: #{TestEngine.testing(true) { @dna.contains?(another_dna) }}"
+    TestEngine.testing(true) { @dna.contains?(another_dna) }
   end
 
   def test5
     setup
     another_dna = 'GG'
-    puts "Test 5: #{TestEngine.testing(false) { @dna.contains?(another_dna) }}"
+    TestEngine.testing(false) { @dna.contains?(another_dna) }
   end
 
   def test6
     setup
-    puts "Test 6: #{TestEngine.testing([1, 2]) { @dna.positions('T') }}"
+    TestEngine.testing([1, 2]) { @dna.positions('T') }
   end
 
   def test7
     setup
     dna2 = DNA.new('GTTGAC')
-    puts "Test 7: #{TestEngine.testing(2) { @dna.hamming_distance(dna2) }}"
+    TestEngine.testing(2) { @dna.hamming_distance(dna2) }
   end
 
   def test8
     setup
-    puts "Test 8: #{TestEngine.testing(0) { @dna.hamming_distance(@dna) }}"
+    TestEngine.testing(0) { @dna.hamming_distance(@dna) }
   end
 
   def test9
     setup
-    puts "Test 9: #{TestEngine.testing(nil) do
-      @dna.hamming_distance(DNA.new('AT'))
-    end}"
+    TestEngine.testing(nil) { @dna.hamming_distance(DNA.new('AT')) }
   end
 
   def test10
     setup
     expected = { 'A' => 1, 'T' => 2, 'G' => 1, 'C' => 2 }
-    puts "Test 10: #{TestEngine.testing(expected) { @dna.frequencies }}"
+    TestEngine.testing(expected) { @dna.frequencies }
   end
 
   def test11
     setup
     dna2 = DNA.new(@dna)
-    puts "Test 11: #{TestEngine.testing(true) { @dna.to_s == dna2.to_s }}"
+    TestEngine.testing(true) { @dna.to_s == dna2.to_s }
   end
 
   def test12
     setup
     dna2 = DNA.new(dna)
-    puts "Test 12: #{TestEngine.testing(true) { @dna == dna2 }}"
+    TestEngine.testing(true) { @dna == dna2 }
   end
 
   def test13
     setup
     sample = 'CA'
-    puts "Test 13: #{TestEngine.testing(false) { @dna.contains?(sample) }}"
+    TestEngine.testing(false) { @dna.contains?(sample) }
   end
 
   def test14
     setup
     @dna = DNA.new('AATTCC')
     expected = { 'A' => 2, 'T' => 2, 'G' => 0, 'C' => 2 }
-    puts "Test 14: #{TestEngine.testing(expected) { @dna.frequencies }}"
+    TestEngine.testing(expected) { @dna.frequencies }
   end
 end
 
@@ -287,9 +290,193 @@ class RpnTest
 
   def test_user_input2
     setup
+    expected = %w[]
+    TestEngine.testing(expected) { @calculator.user_input({ 'expression' => '' }) }
+  end
 
+  def test_user_input3
+    setup
+    expected = %w[10 20 / 4 *]
+    TestEngine.testing(expected) { @calculator.user_input({ 'expression' => '10 20 / 4 *' }) }
+  end
+
+  def test_exit1
+    setup
+    TestEngine.testing(false) { @calculator.exit?(%w[10 20 / 4]) }
+  end
+
+  def test_exit2
+    setup
+    TestEngine.testing(false) { @calculator.exit?(%w[]) }
+  end
+
+  def test_exit3
+    setup
+    TestEngine.testing(false) { @calculator.exit?(%w[10 20 / 4 quit]) }
+  end
+
+  def test_exit4
+    setup
+    TestEngine.testing(true) { @calculator.exit?(%w[quit]) }
+  end
+
+  def test_exit5
+    setup
+    TestEngine.testing(true) { @calculator.exit?(%w[quit 10 20 -]) }
+  end
+
+  def test_number1
+    setup
+    TestEngine.testing(true) { @calculator.number?('1') }
+  end
+
+  def test_number2
+    setup
+    TestEngine.testing(true) { @calculator.number?('101') }
+  end
+
+  def test_number3
+    setup
+    TestEngine.testing(true) { @calculator.number?('-9') }
+  end
+
+  def test_number4
+    setup
+    TestEngine.testing(true) { @calculator.number?('-0') }
+  end
+
+  def test_number5
+    setup
+    TestEngine.testing(true) { @calculator.number?('0') }
+  end
+
+  def test_number6
+    setup
+    TestEngine.testing(false) { @calculator.number?('-0a') }
+  end
+
+  def test_number7
+    setup
+    TestEngine.testing(false) { @calculator.number?('-q10') }
+  end
+
+  def test_number8
+    setup
+    TestEngine.testing(false) { @calculator.number?('1000O') }
+  end
+
+  def test_number9
+    setup
+    TestEngine.testing(false) { @calculator.number?('1000O  10') }
+  end
+
+  def test_operator1
+    setup
+    TestEngine.testing(false) { @calculator.operator?('1000O  10') }
+  end
+
+  def test_operator2
+    setup
+    TestEngine.testing(true) { @calculator.operator?('-') }
+  end
+
+  def test_operator3
+    setup
+    TestEngine.testing(true) { @calculator.operator?('+') }
+  end
+
+  def test_operator4
+    setup
+    TestEngine.testing(true) { @calculator.operator?('/') }
+  end
+
+  def test_operator5
+    setup
+    TestEngine.testing(true) { @calculator.operator?('*') }
+  end
+
+  def test_operator6
+    setup
+    TestEngine.testing(false) { @calculator.operator?('+-') }
+  end
+
+  def test_operator7
+    setup
+    TestEngine.testing(false) { @calculator.operator?(%w[+-/*]) }
+  end
+
+  def test_operator8
+    setup
+    TestEngine.testing(false) { @calculator.operator?(%w[+ - / *]) }
+  end
+
+  def test_enough_operands1
+    setup
+    TestEngine.testing(true) { @calculator.enough_operands?([10, 10]) }
+  end
+
+  def test_enough_operands2
+    setup
+    TestEngine.testing(false) { @calculator.enough_operands?([10]) }
+  end
+
+  def test_enough_operands3
+    setup
+    TestEngine.testing(true) { @calculator.enough_operands?([10, 10, 10]) }
+  end
+
+  def test_enough_operands4
+    setup
+    TestEngine.testing(false) { @calculator.enough_operands?([]) }
+  end
+
+  def test_apply_operator1
+    setup
+    TestEngine.testing(-1) { @calculator.apply_operator(1, 2, '-') }
+  end
+
+  def test_apply_operator2
+    setup
+    TestEngine.testing(3) { @calculator.apply_operator(1, 2, '+') }
+  end
+
+  def test_apply_operator3
+    setup
+    TestEngine.testing(20) { @calculator.apply_operator(10, 2, '*') }
+  end
+
+  def test_apply_operator4
+    setup
+    TestEngine.testing(10) { @calculator.apply_operator(100, 10, '/') }
+  end
+
+  def test_apply_operator5
+    setup
+    TestEngine.testing(nil) { @calculator.apply_operator(1, 2, '=') }
+  end
+
+  def test_apply_operator6
+    setup
+    TestEngine.testing(nil) { @calculator.apply_operator(1, 2, 10) }
+  end
+
+  def test_print_answer1
+    setup
+    TestEngine.testing('Bad input!') { @calculator.answer([10, 10]) }
+  end
+
+  def test_print_answer2
+    setup
+    TestEngine.testing('Bad input!') { @calculator.answer(nil) }
+  end
+
+  def test_print_answer3
+    setup
+    TestEngine.testing('The answer is: 10') { @calculator.answer([10]) }
   end
 end
 
 TestEngine.run_tests(DnaTest.new)
-# TestEngine.run_tests(RpnTest.new)
+TestEngine.run_tests(RpnTest.new)
+
+# TODO: Parameterized Tests!!
