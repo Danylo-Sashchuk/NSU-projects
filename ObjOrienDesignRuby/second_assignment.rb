@@ -83,7 +83,9 @@ class SumIntegers
     end
   end
 
-  def user_input
+  def user_input(optional = {})
+    return optional['expression'].split if optional.key?('expression') # hash attributes for convenient unit testing
+
     print "Write an expression in Reverse Polish Notation (or 'quit' to exit): "
     gets.chomp.split
   end
@@ -158,18 +160,22 @@ class TestEngine
   def self.testing(expected)
     actual = yield
     if actual == expected
-      "#{PASS}Passed #{RESET}"
+      print "#{PASS}Passed #{RESET}"
     else
-      "#{FAIL}Failed #{RESET}"
+      print "#{FAIL}Failed #{RESET}"
     end
   end
 
   # Method for searching and running test methods in a class
   def self.run_tests(clazz)
     puts("Run tests in #{clazz.class.name}:")
-    methods = clazz.methods.select { |method_name| method_name.to_s.match(/^test\d+/) }
+    methods = clazz.methods.select { |method_name| method_name.to_s.match(/^test\d*_?/) }
     methods = methods.sort_by { |method_name| method_name.to_s[/\d+/].to_i }
-    methods.each { |method| clazz.send(method) }
+    methods.each do |method|
+      print "#{method}: "
+      clazz.send(method)
+      print "\n"
+    end
     puts("-------\n")
   end
 end
@@ -265,13 +271,25 @@ class DnaTest
   end
 end
 
-class CalculatorTest
-  def test1
+# Tests for RPN
+class RpnTest
+  attr_accessor :calculator
+
+  def setup
+    @calculator = SumIntegers.new
+  end
+
+  def test_user_input1
+    setup
+    expected = %w[10 20 /]
+    TestEngine.testing(expected) { @calculator.user_input({ 'expression' => '10 20 /' }) }
+  end
+
+  def test_user_input2
+    setup
+
   end
 end
 
-# dna = DNA.new("asd")
-# puts dna.hamming_distance("aq")
 TestEngine.run_tests(DnaTest.new)
-# sum = SumInteger.new
-# sum.run
+# TestEngine.run_tests(RpnTest.new)
