@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
+# Class that represents DNA and its methods.
 class DNA
   attr_reader :dna
 
   def initialize(dna)
-    @dna = dna.to_s
+    @dna = dna.to_s.upcase
   end
 
   def to_s
@@ -16,8 +17,11 @@ class DNA
   end
 
   def hamming_distance(dna)
-    raise ArgumentError, 'dnas of different lengths' if dna.length != @dna.length
-
+    correct_length?(dna)
+  rescue ArgumentError => e
+    print_exception(e)
+  else
+    dna = dna.to_s.upcase
     distance = 0
     @dna.chars.each_with_index do |char, index|
       distance += 1 if dna.to_s[index] != char
@@ -26,7 +30,7 @@ class DNA
   end
 
   def contains?(dna)
-    @dna.include?(dna.to_s)
+    @dna.include?(dna.to_s.upcase)
   end
 
   def positions(nucleotide)
@@ -37,16 +41,14 @@ class DNA
     indexes
   end
 
-  # TODO: IT MUST BE A = 0, CAPITALIZED
-  # ask if result hash should contain nucleotide that doesnt appear in dna such as { "A" => 0 }
   def frequencies
-    frequency = {}
+    frequency = { 'A' => 0,
+                  'C' => 0,
+                  'G' => 0,
+                  'T' => 0
+    }
     @dna.each_char do |char|
-      if frequency.key?(char)
-        frequency[char] += 1
-      else
-        frequency[char] = 1
-      end
+      frequency[char] += 1
     end
     frequency
   end
@@ -54,11 +56,34 @@ class DNA
   def ==(other)
     @dna.to_s == other.to_s
   end
+
+  private
+
+  def correct_length?(dna)
+    raise ArgumentError, 'DNAs of different lengths' if dna.length != @dna.length
+  end
+
+  def print_exception(exception)
+    puts "#{exception.class}: #{exception.message}"
+    puts exception.backtrace
+  end
 end
 
-class SumInteger
+# Class that implements calculating the expression in Reverse Polish Notation.
+class SumIntegers
 
-  def get_input
+  def run
+    puts "Hello!\nLet's do some calculations, shall we?"
+    loop do
+      input = user_input
+      break if exit?(input)
+
+      result = evaluate_expression(input)
+      print_answer(result)
+    end
+  end
+
+  def user_input
     print "Write an expression in Reverse Polish Notation (or 'quit' to exit): "
     gets.chomp.split
   end
@@ -72,26 +97,14 @@ class SumInteger
     end
   end
 
-  def is_number?(element)
-    /^-?\d+(\.\d+)?$/.match?(element)
-  end
-
-  def is_operator?(element)
-    %w[+ - * /].include?(element)
-  end
-
-  def has_enough_operands?(operands)
-    operands.size > 1
-  end
-
   def evaluate_expression(input)
     operands = []
     input.each do |element|
-      if is_number?(element)
-        operands << element.to_s
-      elsif is_operator?(element) && has_enough_operands?(operands)
-        num1 = operands.pop.to_i
-        num2 = operands.pop.to_i
+      if number?(element)
+        operands << element.to_i
+      elsif operator?(element) && enough_operands?(operands)
+        num1 = operands.pop
+        num2 = operands.pop
         operands << apply_operator(num1, num2, element)
       else
         return nil
@@ -100,43 +113,48 @@ class SumInteger
     operands
   end
 
+  def number?(element)
+    /^-?\d+(\.\d+)?$/.match?(element)
+  end
+
+  def operator?(element)
+    %w[+ - * /].include?(element)
+  end
+
+  def enough_operands?(operands)
+    operands.size > 1
+  end
+
   def apply_operator(int1, int2, operator)
     operators = {
-      "+" => int1 + int2,
-      "-" => int1 - int2,
-      "*" => int1 * int2,
-      "/" => int1 / int2
+      '+' => int1 + int2,
+      '-' => int1 - int2,
+      '*' => int1 * int2,
+      '/' => int1 / int2
     }
-
     operators[operator]
   end
 
   def print_answer(result)
-    if result == nil || result.size != 1
-      puts "Bad input!"
+    if result.nil? || result.size != 1
+      puts 'Bad input!'
     else
       puts "The answer is: #{result[0]}"
     end
   end
-
-  def run
-    puts "Hello!\nLet's do some calculations, shall we?"
-    loop do
-      input = get_input
-      break if exit?(input)
-
-      result = evaluate_expression(input)
-      print_answer(result)
-    end
-  end
 end
 
-# Class with static methods for convenient testing
+#------------------------------
+#         Test Classes
+#------------------------------
+
+# Static methods for convenient testing
 class TestEngine
   RESET = "\e[0m"
   FAIL = "\e[31m"
   PASS = "\e[32m"
 
+  # Template method for comparing expected and actual values
   def self.testing(expected)
     actual = yield
     if actual == expected
@@ -156,7 +174,7 @@ class TestEngine
   end
 end
 
-# Test class
+# Tests for DNA
 class DnaTest
   attr_accessor :dna
 
@@ -210,12 +228,9 @@ class DnaTest
 
   def test9
     setup
-    puts "Test 9: #{TestEngine.testing(nil)}" do
+    puts "Test 9: #{TestEngine.testing(nil) do
       @dna.hamming_distance(DNA.new('AT'))
-    rescue ArgumentError => e
-      puts "#{e.class}: #{e.message}"
-      puts e.backtrace
-    end
+    end}"
   end
 
   def test10
@@ -241,6 +256,13 @@ class DnaTest
     sample = 'CA'
     puts "Test 13: #{TestEngine.testing(false) { @dna.contains?(sample) }}"
   end
+
+  def test14
+    setup
+    @dna = DNA.new('AATTCC')
+    expected = { 'A' => 2, 'T' => 2, 'G' => 0, 'C' => 2 }
+    puts "Test 14: #{TestEngine.testing(expected) { @dna.frequencies }}"
+  end
 end
 
 class CalculatorTest
@@ -248,6 +270,8 @@ class CalculatorTest
   end
 end
 
-# TestEngine.run_tests(DNA_Test.new)
-sum = SumInteger.new
-sum.run
+# dna = DNA.new("asd")
+# puts dna.hamming_distance("aq")
+TestEngine.run_tests(DnaTest.new)
+# sum = SumInteger.new
+# sum.run
