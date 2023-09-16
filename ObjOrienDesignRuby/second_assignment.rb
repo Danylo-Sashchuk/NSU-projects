@@ -86,9 +86,9 @@ class SumIntegers
     end
   end
 
-  def user_input(optional = {})
-    if optional.key?('expression') # hash attributes for convenient unit testing
-      optional['expression'].split
+  def user_input(expression = nil)
+    if !expression.nil? # hash attributes for convenient unit testing
+      expression.split
     else
       print "Write an expression in Reverse Polish Notation (or 'quit' to exit): "
       gets.chomp.split
@@ -155,6 +155,7 @@ class TestEngine
   RESET = "\e[0m"
   FAIL = "\e[31m"
   PASS = "\e[32m"
+  TestCase = Struct.new(:function, :expected)
 
   # Template method for comparing expected and actual values
   def self.testing(expected)
@@ -164,6 +165,10 @@ class TestEngine
     else
       "#{FAIL}Failed #{RESET}"
     end
+  end
+
+  def self.test_with_one_parameter(test_case)
+
   end
 
   # Method for searching and running test methods in a class
@@ -282,6 +287,11 @@ class RpnTest
 
   def setup
     @calculator = SumIntegers.new
+  end
+
+  def test_user_inputs
+    setup
+    user_input_template([->(expression) { @calculator.user_input(expression) }])
   end
 
   def test_user_input1

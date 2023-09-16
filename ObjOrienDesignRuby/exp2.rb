@@ -58,12 +58,26 @@ hello.talk
 #   x[:block].call
 # end
 
-class Calc
-  def sum(int1, int2)
-    int2 + int1
+class TestEngine
+  def self.testing(expected)
+    actual = yield
+    if actual == expected
+      "#{PASS}Passed #{RESET}"
+    else
+      "#{FAIL}Failed #{RESET}"
+    end
+  end
+
+  def self.param_test(array)
+    array.each do |test|
+      method = test[0]
+      parameters = test[1...-1]
+      expected = test[-1]
+      TestEngine.testing(expected) { method.call(parameters, 2) }
+    end
   end
 end
 
-mass = [Calc.new.method(:sum), 10, 20]
-exp = 30
-puts mass[0].call(mass[1], mass[2])
+puts TestEngine.param_test([
+                             [->(a, b) { a + b }, 3, 7, 10]
+                           ])
