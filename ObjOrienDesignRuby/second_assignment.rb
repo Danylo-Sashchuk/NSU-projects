@@ -445,3 +445,6 @@ end
 
 TestEngine.run_tests(DnaTest.new)
 TestEngine.run_tests(RpnTest.new)
+
+r = SumIntegers.new
+r.run
