@@ -446,5 +446,18 @@ end
 TestEngine.run_tests(DnaTest.new)
 TestEngine.run_tests(RpnTest.new)
 
+puts dna1 = DNA.new('ATTGCC')
+puts dna1.length
+puts dna1
+puts dna1.contains?('TGC')
+puts dna1.contains?(DNA.new('AT'))
+puts dna1.contains?('GG')
+print("#{dna1.positions('T')}\n")
+puts dna2 = DNA.new('GTTGAC')
+puts dna1.hamming_distance(dna2)
+puts dna1.hamming_distance(dna1)
+puts dna1.hamming_distance(DNA.new('AT'))
+puts dna1.frequencies
+
 r = SumIntegers.new
 r.run
