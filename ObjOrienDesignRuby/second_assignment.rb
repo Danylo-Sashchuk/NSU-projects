@@ -78,7 +78,7 @@ class SumIntegers
       input = user_input
       if exit?(input)
         puts 'Bye!'
-        break
+        return
       end
 
       result = evaluate_expression(input)
