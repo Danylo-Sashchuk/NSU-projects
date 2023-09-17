@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Class that represents DNA and its methods.
+# Class that represents DNA and its methods
 class DNA
   attr_reader :dna
 
@@ -42,10 +42,11 @@ class DNA
   end
 
   def frequencies
-    frequency = { 'A' => 0,
-                  'C' => 0,
-                  'G' => 0,
-                  'T' => 0
+    frequency = {
+      'A' => 0,
+      'C' => 0,
+      'G' => 0,
+      'T' => 0
     }
     @dna.each_char do |char|
       frequency[char] += 1
@@ -71,7 +72,6 @@ end
 
 # Class that implements calculating the expression in Reverse Polish Notation.
 class SumIntegers
-
   def run
     puts "Hello!\nLet's do some calculations, shall we?"
     loop do
@@ -172,9 +172,10 @@ class TestEngine
     methods = clazz.methods.select { |method_name| method_name.to_s.match(/^test\d*_?/) }
     methods = sort_methods(methods)
     methods.each do |method|
-      print "#{method}: #{clazz.send(method)}\n"
+      print "#{method}: "
+      print "#{clazz.send(method)}\n"
     end
-    puts("-------\n")
+    print "------------\n\n"
   end
 
   def self.sort_methods(methods)
@@ -192,9 +193,9 @@ class TestEngine
   # test_cases = [[true, 2], [false, 3]]
   def self.param_test(method, test_cases)
     test_cases.each_with_index do |test_case, index|
-      print("\tTest #{index}: #{execute_method(method, test_case)}\n")
+      print("\n\tTest #{index + 1}: #{execute_method(method, test_case)}")
     end
-    print("------------\n")
+    ''
   end
 
   def self.execute_method(method, test_case)
@@ -382,7 +383,7 @@ class RpnTest
         [true, '*'],
         [false, %w[+ -]],
         [false, %w[+ - / *]],
-        [false, %w[+ - / *]],
+        [false, %w[+ - / *]]
       ]
     )
   end
@@ -436,11 +437,11 @@ class RpnTest
         [[30], %w[1 2 + 10 *]],
         [nil, %w[1 2 + 10 * -]],
         [[2], %w[1 2 + 10 * 60 /]],
-        [nil, %w[1 2 + qwerty 10 * 60 /]],
+        [nil, %w[1 2 + qwerty 10 * 60 /]]
       ]
     )
   end
 end
 
-# TestEngine.run_tests(DnaTest.new)
+TestEngine.run_tests(DnaTest.new)
 TestEngine.run_tests(RpnTest.new)
