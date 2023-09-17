@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Problem 1
 # Class that represents DNA and its methods
 class DNA
   attr_reader :dna
@@ -70,6 +71,7 @@ class DNA
   end
 end
 
+# Problem 2
 # Class that implements calculating the expression in Reverse Polish Notation.
 class SumIntegers
   def run
@@ -146,9 +148,9 @@ class SumIntegers
   end
 end
 
-#------------------------------
-#         Test Classes
-#------------------------------
+#-----------------------------------------
+#             Test Classes
+#-----------------------------------------
 
 # Static methods for convenient testing
 class TestEngine
@@ -189,7 +191,7 @@ class TestEngine
 
   # Implementation of parameterized test.
   # test_cases is an array of arrays where each array represents one test case.
-  # In every test_case array first element is always Expected value, while all others are parameters for the method.
+  # In every test_case array first element is always Expected value, while all others are parameters for the Method.
   # test_cases = [[true, 2], [false, 3]]
   def self.param_test(method, test_cases)
     test_cases.each_with_index do |test_case, index|
