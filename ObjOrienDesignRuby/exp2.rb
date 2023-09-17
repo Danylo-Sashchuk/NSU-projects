@@ -77,7 +77,3 @@ class TestEngine
     end
   end
 end
-
-puts TestEngine.param_test([
-                             [->(a, b) { a + b }, 3, 7, 10]
-                           ])

@@ -155,7 +155,6 @@ class TestEngine
   RESET = "\e[0m"
   FAIL = "\e[31m"
   PASS = "\e[32m"
-  TestCase = Struct.new(:function, :expected)
 
   # Template method for comparing expected and actual values
   def self.testing(expected)
@@ -165,10 +164,6 @@ class TestEngine
     else
       "#{FAIL}Failed #{RESET}"
     end
-  end
-
-  def self.test_with_one_parameter(test_case)
-
   end
 
   # Method for searching and running test methods in a class
@@ -189,6 +184,49 @@ class TestEngine
       number_part = match_data[2].to_i
       [name_part, number_part]
     end
+  end
+
+  # Implementation of parameterized test.
+  # test_cases is an array of arrays where each array represents one test case.
+  # In every test_case array first element is always Expected value, while all others are parameters for the method.
+  # test_cases = [[true, 2], [false, 3]]
+  def self.param_test(method, test_cases)
+    test_cases.each_with_index do |test_case, index|
+      print("\tTest #{index}: #{execute_method(method, test_case)}\n")
+    end
+    print("------------\n")
+  end
+
+  def self.execute_method(method, test_case)
+    expected = test_case[0]
+    parameters = test_case[1..]
+    case parameters.size
+    when 1
+      test_one_parameter(method, expected, parameters)
+    when 2
+      test_two_parameters(method, expected, parameters)
+    when 3
+      test_three_parameters(method, expected, parameters)
+    else
+      raise ArgumentError
+    end
+  end
+
+  def self.test_one_parameter(method, expected, parameter)
+    testing(expected) { method.call(parameter[0]) }
+  end
+
+  def self.test_two_parameters(method, expected, parameters)
+    p1 = parameters[0]
+    p2 = parameters[1]
+    testing(expected) { method.call(p1, p2) }
+  end
+
+  def self.test_three_parameters(method, expected, parameters)
+    p1 = parameters[0]
+    p2 = parameters[1]
+    p3 = parameters[2]
+    testing(expected) { method.call(p1, p2, p3) }
   end
 end
 
@@ -291,229 +329,118 @@ class RpnTest
 
   def test_user_inputs
     setup
-    user_input_template([->(expression) { @calculator.user_input(expression) }])
+    TestEngine.param_test(
+      ->(expression) { @calculator.user_input(expression) },
+      [
+        [%w[10 20 /], '10 20 /'],
+        [%w[], ''],
+        [%w[10 20 / 4 *], '10 20 / 4 *']
+      ]
+    )
   end
 
-  def test_user_input1
+  def test_exits?
     setup
-    expected = %w[10 20 /]
-    TestEngine.testing(expected) { @calculator.user_input({ 'expression' => '10 20 /' }) }
+    TestEngine.param_test(
+      ->(input) { @calculator.exit?(input) },
+      [
+        [false, %w[10 20 / 4]],
+        [false, %w[]],
+        [false, %w[10 20 / 4 quit]],
+        [true, %w[quit]],
+        [true, %w[quit 10 20 -]]
+      ]
+    )
   end
 
-  def test_user_input2
+  def test_numbers?
     setup
-    expected = %w[]
-    TestEngine.testing(expected) { @calculator.user_input({ 'expression' => '' }) }
+    TestEngine.param_test(
+      ->(input) { @calculator.number?(input) },
+      [
+        [true, '1'],
+        [true, '101'],
+        [true, '-9'],
+        [true, '-0'],
+        [true, '0'],
+        [false, '-0a'],
+        [false, '-q10'],
+        [false, '1000O'],
+        [false, '1000O  10']
+      ]
+    )
   end
 
-  def test_user_input3
+  def test_operators?
     setup
-    expected = %w[10 20 / 4 *]
-    TestEngine.testing(expected) { @calculator.user_input({ 'expression' => '10 20 / 4 *' }) }
+    TestEngine.param_test(
+      ->(input) { @calculator.operator?(input) },
+      [
+        [true, '-'],
+        [true, '+'],
+        [true, '/'],
+        [true, '*'],
+        [false, %w[+ -]],
+        [false, %w[+ - / *]],
+        [false, %w[+ - / *]],
+      ]
+    )
   end
 
-  def test_exit1
+  def test_enough_operands?
     setup
-    TestEngine.testing(false) { @calculator.exit?(%w[10 20 / 4]) }
+    TestEngine.param_test(
+      ->(input) { @calculator.enough_operands?(input) },
+      [
+        [true, [10, 10]],
+        [false, [10]],
+        [true, [10, 10, 10]],
+        [false, []]
+      ]
+    )
   end
 
-  def test_exit2
+  def test_apply_operators
     setup
-    TestEngine.testing(false) { @calculator.exit?(%w[]) }
+    TestEngine.param_test(
+      ->(int1, int2, operator) { @calculator.apply_operator(int1, int2, operator) },
+      [
+        [-1, 1, 2, '-'],
+        [3, 1, 2, '+'],
+        [20, 10, 2, '*'],
+        [10, 100, 10, '/'],
+        [nil, 1, 2, '='],
+        [nil, 1, 2, 10]
+      ]
+    )
   end
 
-  def test_exit3
+  def test_answer
     setup
-    TestEngine.testing(false) { @calculator.exit?(%w[10 20 / 4 quit]) }
+    TestEngine.param_test(
+      ->(input) { @calculator.answer(input) },
+      [
+        ['Bad input!', [10, 10]],
+        ['Bad input!', nil],
+        ['The answer is: 10', [10]]
+      ]
+    )
   end
 
-  def test_exit4
+  def test_evaluate_expressions
     setup
-    TestEngine.testing(true) { @calculator.exit?(%w[quit]) }
-  end
-
-  def test_exit5
-    setup
-    TestEngine.testing(true) { @calculator.exit?(%w[quit 10 20 -]) }
-  end
-
-  def test_number1
-    setup
-    TestEngine.testing(true) { @calculator.number?('1') }
-  end
-
-  def test_number2
-    setup
-    TestEngine.testing(true) { @calculator.number?('101') }
-  end
-
-  def test_number3
-    setup
-    TestEngine.testing(true) { @calculator.number?('-9') }
-  end
-
-  def test_number4
-    setup
-    TestEngine.testing(true) { @calculator.number?('-0') }
-  end
-
-  def test_number5
-    setup
-    TestEngine.testing(true) { @calculator.number?('0') }
-  end
-
-  def test_number6
-    setup
-    TestEngine.testing(false) { @calculator.number?('-0a') }
-  end
-
-  def test_number7
-    setup
-    TestEngine.testing(false) { @calculator.number?('-q10') }
-  end
-
-  def test_number8
-    setup
-    TestEngine.testing(false) { @calculator.number?('1000O') }
-  end
-
-  def test_number9
-    setup
-    TestEngine.testing(false) { @calculator.number?('1000O  10') }
-  end
-
-  def test_operator1
-    setup
-    TestEngine.testing(false) { @calculator.operator?('1000O  10') }
-  end
-
-  def test_operator2
-    setup
-    TestEngine.testing(true) { @calculator.operator?('-') }
-  end
-
-  def test_operator3
-    setup
-    TestEngine.testing(true) { @calculator.operator?('+') }
-  end
-
-  def test_operator4
-    setup
-    TestEngine.testing(true) { @calculator.operator?('/') }
-  end
-
-  def test_operator5
-    setup
-    TestEngine.testing(true) { @calculator.operator?('*') }
-  end
-
-  def test_operator6
-    setup
-    TestEngine.testing(false) { @calculator.operator?('+-') }
-  end
-
-  def test_operator7
-    setup
-    TestEngine.testing(false) { @calculator.operator?(%w[+-/*]) }
-  end
-
-  def test_operator8
-    setup
-    TestEngine.testing(false) { @calculator.operator?(%w[+ - / *]) }
-  end
-
-  def test_enough_operands1
-    setup
-    TestEngine.testing(true) { @calculator.enough_operands?([10, 10]) }
-  end
-
-  def test_enough_operands2
-    setup
-    TestEngine.testing(false) { @calculator.enough_operands?([10]) }
-  end
-
-  def test_enough_operands3
-    setup
-    TestEngine.testing(true) { @calculator.enough_operands?([10, 10, 10]) }
-  end
-
-  def test_enough_operands4
-    setup
-    TestEngine.testing(false) { @calculator.enough_operands?([]) }
-  end
-
-  def test_apply_operator1
-    setup
-    TestEngine.testing(-1) { @calculator.apply_operator(1, 2, '-') }
-  end
-
-  def test_apply_operator2
-    setup
-    TestEngine.testing(3) { @calculator.apply_operator(1, 2, '+') }
-  end
-
-  def test_apply_operator3
-    setup
-    TestEngine.testing(20) { @calculator.apply_operator(10, 2, '*') }
-  end
-
-  def test_apply_operator4
-    setup
-    TestEngine.testing(10) { @calculator.apply_operator(100, 10, '/') }
-  end
-
-  def test_apply_operator5
-    setup
-    TestEngine.testing(nil) { @calculator.apply_operator(1, 2, '=') }
-  end
-
-  def test_apply_operator6
-    setup
-    TestEngine.testing(nil) { @calculator.apply_operator(1, 2, 10) }
-  end
-
-  def test_print_answer1
-    setup
-    TestEngine.testing('Bad input!') { @calculator.answer([10, 10]) }
-  end
-
-  def test_print_answer2
-    setup
-    TestEngine.testing('Bad input!') { @calculator.answer(nil) }
-  end
-
-  def test_print_answer3
-    setup
-    TestEngine.testing('The answer is: 10') { @calculator.answer([10]) }
-  end
-
-  def test_evaluate_expression1
-    setup
-    TestEngine.testing([3]) { @calculator.evaluate_expression(%w[1 2 +]) }
-  end
-
-  def test_evaluate_expression2
-    setup
-    TestEngine.testing([30]) { @calculator.evaluate_expression(%w[1 2 + 10 *]) }
-  end
-
-  def test_evaluate_expression3
-    setup
-    TestEngine.testing(nil) { @calculator.evaluate_expression(%w[1 2 + 10 * -]) }
-  end
-
-  def test_evaluate_expression4
-    setup
-    TestEngine.testing([2]) { @calculator.evaluate_expression(%w[1 2 + 10 * 60 /]) }
-  end
-
-  def test_evaluate_expression5
-    setup
-    TestEngine.testing(nil) { @calculator.evaluate_expression(%w[1 2 + qwerty 10 * 60 /]) }
+    TestEngine.param_test(
+      ->(input) { @calculator.evaluate_expression(input) },
+      [
+        [[3], %w[1 2 +]],
+        [[30], %w[1 2 + 10 *]],
+        [nil, %w[1 2 + 10 * -]],
+        [[2], %w[1 2 + 10 * 60 /]],
+        [nil, %w[1 2 + qwerty 10 * 60 /]],
+      ]
+    )
   end
 end
 
-TestEngine.run_tests(DnaTest.new)
+# TestEngine.run_tests(DnaTest.new)
 TestEngine.run_tests(RpnTest.new)
-
-# TODO: Parameterized Tests!!
