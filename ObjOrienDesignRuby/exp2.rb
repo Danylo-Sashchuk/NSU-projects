@@ -77,3 +77,5 @@ class TestEngine
     end
   end
 end
+
+int1, int2 = 10, 0

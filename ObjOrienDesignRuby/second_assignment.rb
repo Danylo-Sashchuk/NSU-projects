@@ -129,14 +129,15 @@ class SumIntegers
     operands.size > 1
   end
 
-  def apply_operator(int1, int2, operator)
+  def apply_operator(first, second, operator)
     operators = {
-      '+' => int1 + int2,
-      '-' => int1 - int2,
-      '*' => int1 * int2,
-      '/' => int1 / int2
+      '+' => ->(int1, int2) { int1 + int2 },
+      '-' => ->(int1, int2) { int1 - int2 },
+      '*' => ->(int1, int2) { int1 * int2 },
+      '/' => ->(int1, int2) { int1 / int2 },
     }
-    operators[operator]
+    return nil unless operators.key?(operator)
+    operators[operator].call(first, second)
   end
 
   def answer(result)
@@ -413,7 +414,7 @@ class RpnTest
         [20, 10, 2, '*'],
         [10, 100, 10, '/'],
         [nil, 1, 2, '='],
-        [nil, 1, 2, 10]
+        [nil, 1, 2, '=']
       ]
     )
   end
