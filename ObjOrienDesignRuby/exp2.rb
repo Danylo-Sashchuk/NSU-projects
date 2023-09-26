@@ -41,8 +41,8 @@ hello2.talk('Ralph') # Goodbye Ralph
 # redefine HelloYou#talk method
 class HelloYou
   def talk(*name)
-    print "Hello again "
-    puts name.empty? ? "Huh??" : name[0]
+    print 'Hello again '
+    puts name.empty? ? 'Huh??' : name[0]
   end
 end
 
@@ -78,4 +78,11 @@ class TestEngine
   end
 end
 
-int1, int2 = 10, 0
+def print_smth_here(string)
+  print string
+end
+
+result = {}
+word = 'error'
+word.chars.each { |char, index| result[char] << index }
+puts result
