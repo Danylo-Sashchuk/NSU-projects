@@ -35,13 +35,13 @@ class Wordly
   end
 
   # TODO: add comments
-  def parse_word(word)
-    hash = {}
-    word.chars.each_with_index do |letter, index|
-      hash[letter] ||= [] # Initialize an empty array if the letter is not yet in the hash
-      hash[letter] << index
+  def count_letters(word)
+    letter_count = {}
+    word.each_char do |letter|
+      letter = letter.downcase
+      letter_count[letter] ||= 0
+      letter_count[letter] += 1
     end
-    hash
   end
 
   def initialize
@@ -49,9 +49,14 @@ class Wordly
     @word = parse_word(target_word)
   end
 
-  def check_word(input)
-    @word.chars.each_with_index do |char, index|
+  def check_word(word)
+    # not letters : indexes, but letters : number_of_appearance
+    target_word = @word.dup
+    user_word = parse_word(word)
+    user_word.each do |char, indexes|
+      if target_word.key?(char)
 
+      end
     end
   end
 
