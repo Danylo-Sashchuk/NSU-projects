@@ -82,7 +82,7 @@ def print_smth_here(string)
   print string
 end
 
-result = {}
-word = 'error'
-word.chars.each { |char, index| result[char] << index }
-puts result
+ar = Array.new(5)
+ar[3] = 10
+ar[0] = 'a'
+print ar

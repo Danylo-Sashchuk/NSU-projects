@@ -17,8 +17,10 @@ class ColorizePrinter < Printer
 end
 
 class Wordly
-  attr_reader :word, :printer
-  attr_accessor :color
+  attr_reader :word, :letters, :printer, :color
+  EXACT = '*'
+  INCLUDED = '^'
+  MISS = '-'
 
   def color=(value)
     if value == true
@@ -31,7 +33,7 @@ class Wordly
   end
 
   def choose_word
-    'abort'
+    'arrqq'
   end
 
   # TODO: add comments
@@ -42,29 +44,52 @@ class Wordly
       letter_count[letter] ||= 0
       letter_count[letter] += 1
     end
+    letter_count
   end
 
   def initialize
-    target_word = choose_word
-    @word = parse_word(target_word)
+    @word = choose_word
+
+    # count letters to handle cases where the target word contains multiple identical letters
+    @letters = count_letters(@word)
   end
 
-  def check_word(word)
-    # not letters : indexes, but letters : number_of_appearance
-    target_word = @word.dup
-    user_word = parse_word(word)
-    user_word.each do |char, indexes|
-      if target_word.key?(char)
+  def check_word(guess)
+    output = Array.new(5)
+    target_letters = @letters.dup
+    unmatched_indexes = []
 
+    # first pass - check the letters that match exactly
+    guess.chars.each_with_index do |letter, index|
+      if letter == @word[index]
+        output[index] = 'E'
+        target_letters[letter] -= 1
+      else
+        unmatched_indexes << index
       end
     end
+
+    # then traverse through unmatched indexes for including/miss
+    unmatched_indexes.each do |index|
+      if target_letters.key?(guess[index]) && (target_letters[guess[index]]).positive?
+        output[index] = 'I'
+        target_letters[guess[index]] -= 1
+      else
+        output[index] = 'M'
+      end
+    end
+    output
+  end
+
+  def user_input
+    gets.chomp
   end
 
   def play
     print "Guess the five-letter word:\n"
     6.times do
-      word = user_input
-      result = check_word(word)
+      guess = user_input
+      result = check_word(guess)
       @printer.output(result)
       break if correct?(result)
     end
@@ -72,4 +97,8 @@ class Wordly
 end
 
 w = Wordly.new
-print w.parse_word 'error'
+print w.check_word('aqrrr')
+
+
+# arrqq
+# aqrrr
