@@ -33,7 +33,7 @@ class Wordly
   end
 
   def choose_word
-    'arrqq'
+    'ercar'
   end
 
   # TODO: add comments
@@ -54,7 +54,7 @@ class Wordly
     @letters = count_letters(@word)
   end
 
-  def check_word(guess)
+  def check_word1(guess)
     output = Array.new(5)
     target_letters = @letters.dup
     unmatched_indexes = []
@@ -81,6 +81,29 @@ class Wordly
     output
   end
 
+  def check_word(guess)
+    output = []
+    target_positions = []
+    guess_positions = []
+
+    # Initialize target_positions and guess_positions
+    @word.chars.each_with_index { |letter, index| target_positions[letter] ||= [] << index }
+    guess.chars.each_with_index { |letter, index| guess_positions[letter] ||= [] << index }
+
+    guess.chars.each_with_index do |letter, index|
+      if letter == @word[index]
+        output << 'E'
+      elsif target_positions[letter] && target_positions[letter].any? { |pos| !guess_positions[letter].nil? && guess_positions[letter].include?(pos) }
+        output << 'I'
+        guess_positions[letter].delete_at(guess_positions[letter].index(target_positions[letter].shift))
+      else
+        output << 'M'
+      end
+    end
+
+    output
+  end
+
   def user_input
     gets.chomp
   end
@@ -97,8 +120,9 @@ class Wordly
 end
 
 w = Wordly.new
-print w.check_word('aqrrr')
+print w.check_word('error')
+puts
+print w.check_word1('error')
+# print w.check_word('qwert')
 
-
-# arrqq
-# aqrrr
+# ercar
