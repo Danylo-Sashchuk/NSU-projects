@@ -18,6 +18,7 @@ end
 
 class Wordly
   attr_reader :word, :letters, :printer, :color
+
   EXACT = '*'
   INCLUDED = '^'
   MISS = '-'
@@ -54,53 +55,19 @@ class Wordly
     @letters = count_letters(@word)
   end
 
-  def check_word1(guess)
+  def check_word(guess)
     output = Array.new(5)
     target_letters = @letters.dup
-    unmatched_indexes = []
 
     # first pass - check the letters that match exactly
-    guess.chars.each_with_index do |letter, index|
-      if letter == @word[index]
-        output[index] = 'E'
-        target_letters[letter] -= 1
-      else
-        unmatched_indexes << index
-      end
-    end
+    mark_exact_matches(guess, output, target_letters)
 
-    # then traverse through unmatched indexes for including/miss
-    unmatched_indexes.each do |index|
-      if target_letters.key?(guess[index]) && (target_letters[guess[index]]).positive?
-        output[index] = 'I'
-        target_letters[guess[index]] -= 1
-      else
-        output[index] = 'M'
-      end
-    end
-    output
-  end
+    # It's necessary to go through a separate loop to mark the correct letters.
+    # Otherwise, the result will be wrong
+    # if the target word or user word contains several identical letters.
 
-  def check_word(guess)
-    output = []
-    target_positions = []
-    guess_positions = []
-
-    # Initialize target_positions and guess_positions
-    @word.chars.each_with_index { |letter, index| target_positions[letter] ||= [] << index }
-    guess.chars.each_with_index { |letter, index| guess_positions[letter] ||= [] << index }
-
-    guess.chars.each_with_index do |letter, index|
-      if letter == @word[index]
-        output << 'E'
-      elsif target_positions[letter] && target_positions[letter].any? { |pos| !guess_positions[letter].nil? && guess_positions[letter].include?(pos) }
-        output << 'I'
-        guess_positions[letter].delete_at(guess_positions[letter].index(target_positions[letter].shift))
-      else
-        output << 'M'
-      end
-    end
-
+    # then traverse again for including/miss
+    mark_inclusions_and_misses(guess, output, target_letters)
     output
   end
 
@@ -117,12 +84,33 @@ class Wordly
       break if correct?(result)
     end
   end
+
+  private
+
+  def mark_inclusions_and_misses(guess, output, target_letters)
+    guess.chars.each_with_index do |letter, index|
+      if output[index].nil? && target_letters.key?(letter) && (target_letters[letter]).positive?
+        output[index] = 'I'
+        target_letters[letter] -= 1
+      elsif output[index].nil?
+        output[index] = 'M'
+      end
+    end
+  end
+
+  def mark_exact_matches(guess, output, target_letters)
+    guess.chars.each_with_index do |letter, index|
+      if letter == @word[index]
+        output[index] = 'E'
+        target_letters[letter] -= 1
+      end
+    end
+  end
 end
 
 w = Wordly.new
 print w.check_word('error')
 puts
-print w.check_word1('error')
 # print w.check_word('qwert')
 
 # ercar
