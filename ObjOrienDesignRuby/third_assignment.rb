@@ -9,11 +9,11 @@ class Printer
 end
 
 class LinePrinter < Printer
-  def output(word) end
+  # def output(word) end
 end
 
 class ColorizePrinter < Printer
-  def output(word) end
+  # def output(word) end
 end
 
 class Wordly
@@ -26,7 +26,7 @@ class Wordly
   def color=(value)
     if value == true
       @printer = ColorizePrinter.new
-    elsif value == false
+    elsif value.nil? || value == false
       @printer = LinePrinter.new
     else
       print("Wrong parameter! Values are limited by 'true' and 'false'. \n")
@@ -53,6 +53,8 @@ class Wordly
 
     # count letters to handle cases where the target word contains multiple identical letters
     @letters = count_letters(@word)
+
+    @printer = LinePrinter.new
   end
 
   def check_word(guess)
@@ -75,13 +77,19 @@ class Wordly
     gets.chomp
   end
 
+  def guessed?(result)
+    result.each { |e| return false if e != 'E' }
+    print("You are right! Well done!\n")
+    true
+  end
+
   def play
     print "Guess the five-letter word:\n"
     6.times do
       guess = user_input
       result = check_word(guess)
       @printer.output(result)
-      break if correct?(result)
+      return if guessed?(result)
     end
   end
 
@@ -89,11 +97,13 @@ class Wordly
 
   def mark_inclusions_and_misses(guess, output, target_letters)
     guess.chars.each_with_index do |letter, index|
-      if output[index].nil? && target_letters.key?(letter) && (target_letters[letter]).positive?
-        output[index] = 'I'
-        target_letters[letter] -= 1
-      elsif output[index].nil?
-        output[index] = 'M'
+      if output[index].nil?
+        if target_letters.key?(letter) && target_letters[letter].positive?
+          output[index] = 'I'
+          target_letters[letter] -= 1
+        else
+          output[index] = 'M'
+        end
       end
     end
   end
@@ -109,8 +119,9 @@ class Wordly
 end
 
 w = Wordly.new
-print w.check_word('error')
-puts
-# print w.check_word('qwert')
+w.play
+# print w.check_word('error')
+# puts
+# # print w.check_word('qwert')
 
 # ercar
