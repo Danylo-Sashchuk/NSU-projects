@@ -4,15 +4,14 @@ require 'colorize'
 
 class Printer
   def output(text)
-    text.each_with_index do |char, index|
-
-    end
+    text.each { |char| print_symbol(char) }
+    puts
   end
 end
 
 class LinePrinter < Printer
-  def print_symbol(char)
-    print(case char
+  def print_symbol(symbol)
+    print(case symbol.result
           when 'E'
             '*'
           when 'I'
@@ -24,14 +23,14 @@ class LinePrinter < Printer
 end
 
 class ColorizePrinter < Printer
-  def print_symbol(char)
-    print(case char
+  def print_symbol(symbol)
+    print(case symbol.result
           when 'E'
-            print((@word[index]).colorize(:green))
+            print(symbol.letter.colorize(:green))
           when 'I'
-            print((@word[index]).colorize(:yellow))
+            print(symbol.letter.colorize(:yellow))
           when 'M'
-            print((@word[index]).colorize(:gray))
+            print(symbol.letter)
           end)
   end
 end
@@ -116,7 +115,7 @@ class Wordle
   end
 
   def guessed?(result)
-    result.each { |e| return false if e != 'E' }
+    result.each { |e| return false if e.result != 'E' }
     print("You guessed it! Well done!\n")
     true
   end
@@ -158,7 +157,7 @@ class Wordle
 end
 
 w = Wordle.new
-# w.color = true
+w.color = true
 w.play
 # print w.check_word('error')
 # puts
