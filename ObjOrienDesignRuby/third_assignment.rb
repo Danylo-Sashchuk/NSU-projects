@@ -3,59 +3,47 @@
 require 'colorize'
 
 class Printer
-  def output(word)
-    print("#{word}\n")
+  def output(text)
+    text.each_with_index do |char, index|
+
+    end
   end
 end
-#TODO refactor to use tamplate method in super class
+
 class LinePrinter < Printer
-  def output(word)
-    result = ''
-    word.each do |char|
-      result += case char
-                when 'E'
-                  '*'
-                when 'I'
-                  '^'
-                else
-                  ' '
-                end
-    end
-    puts result
+  def print_symbol(char)
+    print(case char
+          when 'E'
+            '*'
+          when 'I'
+            '^'
+          else
+            ' '
+          end)
   end
 end
 
 class ColorizePrinter < Printer
-  attr_reader :word
-
-  def initialize(word)
-    @word = word
-  end
-
-  def output(word)
-    word.each_with_index do |char, index|
-      case char
-      when 'E'
-        print((@word[index]).colorize(:green))
-      when 'I'
-        print((@word[index]).colorize(:yellow))
-      when 'M'
-        print((@word[index]).colorize(:gray))
-      end
-    end
+  def print_symbol(char)
+    print(case char
+          when 'E'
+            print((@word[index]).colorize(:green))
+          when 'I'
+            print((@word[index]).colorize(:yellow))
+          when 'M'
+            print((@word[index]).colorize(:gray))
+          end)
   end
 end
 
-class Wordly
-  attr_reader :word, :letters, :printer, :color
+class Wordle
+  attr_reader :word, :letters, :printer
 
-  EXACT = '*'
-  INCLUDED = '^'
-  MISS = '-'
+  LetterFeedback = Struct.new(:result, :letter)
 
   def color=(value)
     if value == true
-      @printer = ColorizePrinter.new(@word)
+      @printer = ColorizePrinter.new
     elsif value.nil? || value == false
       @printer = LinePrinter.new
     else
@@ -88,7 +76,8 @@ class Wordly
   end
 
   def check_word(guess)
-    output = Array.new(5)
+    output = Array.new(5) # output consists of result symbol (E, I, or M) and word char itself.
+
     target_letters = @letters.dup
 
     # first pass - check the letters that match exactly
@@ -147,29 +136,29 @@ class Wordly
 
   def mark_inclusions_and_misses(guess, output, target_letters)
     guess.chars.each_with_index do |letter, index|
-      if output[index].nil?
-        if target_letters.key?(letter) && target_letters[letter].positive?
-          output[index] = 'I'
-          target_letters[letter] -= 1
-        else
-          output[index] = 'M'
-        end
+      next unless output[index].nil?
+
+      if target_letters.key?(letter) && target_letters[letter].positive?
+        output[index] = LetterFeedback.new('I', letter)
+        target_letters[letter] -= 1
+      else
+        output[index] = LetterFeedback.new('M', letter)
       end
     end
   end
 
   def mark_exact_matches(guess, output, target_letters)
     guess.chars.each_with_index do |letter, index|
-      if letter == @word[index]
-        output[index] = 'E'
-        target_letters[letter] -= 1
-      end
+      next unless letter == @word[index]
+
+      output[index] = LetterFeedback.new('E', letter)
+      target_letters[letter] -= 1
     end
   end
 end
 
-w = Wordly.new
-w.color = true
+w = Wordle.new
+# w.color = true
 w.play
 # print w.check_word('error')
 # puts
