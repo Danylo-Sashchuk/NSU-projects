@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'colorize'
+require_relative 'words'
 
 class Printer
   def output(text)
@@ -11,14 +12,14 @@ end
 
 class LinePrinter < Printer
   def print_symbol(symbol)
-    print(case symbol.result
-          when 'E'
-            '*'
-          when 'I'
-            '^'
-          else
-            ' '
-          end)
+    case symbol.result
+    when 'E'
+      print('*')
+    when 'I'
+      print('^')
+    else
+      print(' ')
+    end
   end
 end
 
@@ -35,7 +36,8 @@ class ColorizePrinter < Printer
   end
 end
 
-class Wordle
+class Game
+  include Wordle
   attr_reader :word, :letters, :printer
 
   LetterFeedback = Struct.new(:result, :letter)
@@ -51,7 +53,9 @@ class Wordle
   end
 
   def choose_word
-    'ercar'
+    puts Words
+    print "here"
+    # 'ercar'
   end
 
   # TODO: add comments
@@ -157,8 +161,8 @@ class Wordle
 end
 
 w = Wordle.new
-w.color = true
-w.play
+# w.color = true
+# w.play
 # print w.check_word('error')
 # puts
 # # print w.check_word('qwert')
