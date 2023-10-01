@@ -36,11 +36,11 @@ class ColorizePrinter < Printer
     word.each_with_index do |char, index|
       case char
       when 'E'
-        puts ((@word[index])).colorize(:green)
+        print((@word[index]).colorize(:green))
       when 'I'
-        puts ((@word[index])).colorize(:yellow)
+        print((@word[index]).colorize(:yellow))
       when 'M'
-        puts ((@word[index])).colorize(:gray)
+        print((@word[index]).colorize(:gray))
       end
     end
   end
@@ -103,8 +103,27 @@ class Wordly
     output
   end
 
+  def legitimate?(input)
+    if input.length != 5
+      print("Word must be exactly 5 letters long, write again.\n")
+      return false
+    end
+    input.chars.each do |char|
+      unless char.match?(/[A-Za-z]/)
+        print("Word must have only letters, write again.\n")
+        return false
+      end
+    end
+    true
+  end
+
   def user_input
-    gets.chomp
+    input = ''
+    loop do
+      input = gets.chomp
+      break if legitimate?(input)
+    end
+    input
   end
 
   def guessed?(result)
