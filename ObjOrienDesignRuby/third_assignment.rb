@@ -7,7 +7,7 @@ class Printer
     print("#{word}\n")
   end
 end
-
+#TODO refactor to use tamplate method in super class
 class LinePrinter < Printer
   def output(word)
     result = ''
