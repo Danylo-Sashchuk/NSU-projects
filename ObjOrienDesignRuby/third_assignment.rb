@@ -9,11 +9,41 @@ class Printer
 end
 
 class LinePrinter < Printer
-  # def output(word) end
+  def output(word)
+    result = ''
+    word.each do |char|
+      result += case char
+                when 'E'
+                  '*'
+                when 'I'
+                  '^'
+                else
+                  ' '
+                end
+    end
+    puts result
+  end
 end
 
 class ColorizePrinter < Printer
-  # def output(word) end
+  attr_reader :word
+
+  def initialize(word)
+    @word = word
+  end
+
+  def output(word)
+    word.each_with_index do |char, index|
+      case char
+      when 'E'
+        puts ((@word[index])).colorize(:green)
+      when 'I'
+        puts ((@word[index])).colorize(:yellow)
+      when 'M'
+        puts ((@word[index])).colorize(:gray)
+      end
+    end
+  end
 end
 
 class Wordly
@@ -25,7 +55,7 @@ class Wordly
 
   def color=(value)
     if value == true
-      @printer = ColorizePrinter.new
+      @printer = ColorizePrinter.new(@word)
     elsif value.nil? || value == false
       @printer = LinePrinter.new
     else
@@ -79,7 +109,7 @@ class Wordly
 
   def guessed?(result)
     result.each { |e| return false if e != 'E' }
-    print("You are right! Well done!\n")
+    print("You guessed it! Well done!\n")
     true
   end
 
@@ -91,6 +121,7 @@ class Wordly
       @printer.output(result)
       return if guessed?(result)
     end
+    print "Oops, You have run out of attempts.\nThe target word was \"#{@word}\".\nGood luck next time!"
   end
 
   private
@@ -119,6 +150,7 @@ class Wordly
 end
 
 w = Wordly.new
+w.color = true
 w.play
 # print w.check_word('error')
 # puts
