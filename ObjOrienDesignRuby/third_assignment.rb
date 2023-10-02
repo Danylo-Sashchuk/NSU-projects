@@ -49,16 +49,22 @@ module Wordle
       @printer = LinePrinter.new
     end
 
+    def print_congratulations(index)
+      print("You guessed it in #{index} tries! Well done!\n")
+    end
+
     def play
       print "Guess the five-letter word:\n"
-      6.times do
+      6.times do |index|
         guess = user_input
         result = check_word(guess)
         @printer.output(result)
-        return if guessed?(result)
+        if guessed?(result)
+          print_congratulations(index + 1)
+          return
+        end
       end
-      print "Oops, You have run out of attempts.\nThe target word was \"#{@word.colorize(:green)}\"
-                    .\nGood luck next time!"
+      print "Oops, You have run out of attempts.\nThe target word was \"#{@word.colorize(:green)}\".\nGood luck next time!"
     end
 
     def color=(value)
@@ -102,16 +108,9 @@ module Wordle
     end
 
     def legitimate?(input)
-      if input.length != 5
-        print("Word must be exactly 5 letters long, write again.\n")
+      unless Words.include?(input)
+        print("Invalid guess, try again.\n")
         return false
-      end
-
-      input.chars.each do |char|
-        unless char.match?(/[A-Za-z]/)
-          print("Word must have only letters, write again.\n")
-          return false
-        end
       end
       true
     end
@@ -157,8 +156,11 @@ module Wordle
 
     def guessed?(result)
       result.each { |e| return false if e.result != 'E' }
-      print("You guessed it! Well done!\n")
       true
     end
   end
 end
+
+w = Wordle::Game.new
+w.color = true
+w.play
