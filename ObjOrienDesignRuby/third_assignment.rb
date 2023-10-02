@@ -61,7 +61,7 @@ module Wordle
         @printer.output(result)
         return if guessed?(result)
       end
-      print "Oops, You have run out of attempts.\nThe target word was \"#{@word}\".\nGood luck next time!"
+      print "Oops, You have run out of attempts.\nThe target word was \"#{@word.colorize(:green)}\".\nGood luck next time!"
     end
 
     def color=(value)
@@ -160,7 +160,3 @@ module Wordle
     end
   end
 end
-
-w = Wordle::Game.new
-w.color = true
-w.play
