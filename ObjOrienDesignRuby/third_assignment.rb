@@ -42,10 +42,6 @@ module Wordle
   end
 
   class Game
-    attr_reader :word, :letters, :printer
-
-    LetterFeedback = Struct.new(:result, :letter)
-
     def initialize
       @word = choose_word
       # count letters to handle cases where the target word contains multiple identical letters
@@ -61,7 +57,8 @@ module Wordle
         @printer.output(result)
         return if guessed?(result)
       end
-      print "Oops, You have run out of attempts.\nThe target word was \"#{@word.colorize(:green)}\".\nGood luck next time!"
+      print "Oops, You have run out of attempts.\nThe target word was \"#{@word.colorize(:green)}\"
+                    .\nGood luck next time!"
     end
 
     def color=(value)
@@ -75,6 +72,11 @@ module Wordle
     end
 
     private
+
+    attr_reader :word, :letters
+    attr_accessor :printer
+
+    LetterFeedback = Struct.new(:result, :letter)
 
     def choose_word
       Words.sample
