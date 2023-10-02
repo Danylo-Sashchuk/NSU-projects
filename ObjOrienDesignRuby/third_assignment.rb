@@ -3,8 +3,6 @@
 require 'colorize'
 require_relative 'words'
 
-# TODO: private methods
-
 module Wordle
   class Printer
     def output(text)
@@ -44,10 +42,27 @@ module Wordle
   end
 
   class Game
-    include Wordle
     attr_reader :word, :letters, :printer
 
     LetterFeedback = Struct.new(:result, :letter)
+
+    def initialize
+      @word = choose_word
+      # count letters to handle cases where the target word contains multiple identical letters
+      @letters = count_letters(@word)
+      @printer = LinePrinter.new
+    end
+
+    def play
+      print "Guess the five-letter word:\n"
+      6.times do
+        guess = user_input
+        result = check_word(guess)
+        @printer.output(result)
+        return if guessed?(result)
+      end
+      print "Oops, You have run out of attempts.\nThe target word was \"#{@word}\".\nGood luck next time!"
+    end
 
     def color=(value)
       if value == true
@@ -59,12 +74,12 @@ module Wordle
       end
     end
 
+    private
+
     def choose_word
       Words.sample
-      # 'ercar'
     end
 
-    # TODO: add comments
     def count_letters(word)
       letter_count = {}
       word.each_char do |letter|
@@ -75,13 +90,28 @@ module Wordle
       letter_count
     end
 
-    def initialize
-      @word = choose_word
+    def user_input
+      input = ''
+      loop do
+        input = gets.chomp
+        break if legitimate?(input)
+      end
+      input
+    end
 
-      # count letters to handle cases where the target word contains multiple identical letters
-      @letters = count_letters(@word)
+    def legitimate?(input)
+      if input.length != 5
+        print("Word must be exactly 5 letters long, write again.\n")
+        return false
+      end
 
-      @printer = LinePrinter.new
+      input.chars.each do |char|
+        unless char.match?(/[A-Za-z]/)
+          print("Word must have only letters, write again.\n")
+          return false
+        end
+      end
+      true
     end
 
     def check_word(guess)
@@ -101,47 +131,14 @@ module Wordle
       output
     end
 
-    def legitimate?(input)
-      if input.length != 5
-        print("Word must be exactly 5 letters long, write again.\n")
-        return false
-      end
-      input.chars.each do |char|
-        unless char.match?(/[A-Za-z]/)
-          print("Word must have only letters, write again.\n")
-          return false
-        end
-      end
-      true
-    end
+    def mark_exact_matches(guess, output, target_letters)
+      guess.chars.each_with_index do |letter, index|
+        next unless letter == @word[index]
 
-    def user_input
-      input = ''
-      loop do
-        input = gets.chomp
-        break if legitimate?(input)
+        output[index] = LetterFeedback.new('E', letter)
+        target_letters[letter] -= 1
       end
-      input
     end
-
-    def guessed?(result)
-      result.each { |e| return false if e.result != 'E' }
-      print("You guessed it! Well done!\n")
-      true
-    end
-
-    def play
-      print "Guess the five-letter word:\n"
-      6.times do
-        guess = user_input
-        result = check_word(guess)
-        @printer.output(result)
-        return if guessed?(result)
-      end
-      print "Oops, You have run out of attempts.\nThe target word was \"#{@word}\".\nGood luck next time!"
-    end
-
-    private
 
     def mark_inclusions_and_misses(guess, output, target_letters)
       guess.chars.each_with_index do |letter, index|
@@ -156,17 +153,14 @@ module Wordle
       end
     end
 
-    def mark_exact_matches(guess, output, target_letters)
-      guess.chars.each_with_index do |letter, index|
-        next unless letter == @word[index]
-
-        output[index] = LetterFeedback.new('E', letter)
-        target_letters[letter] -= 1
-      end
+    def guessed?(result)
+      result.each { |e| return false if e.result != 'E' }
+      print("You guessed it! Well done!\n")
+      true
     end
   end
 end
 
-# w = Wordle::Game.new
-# w.color = true
-# w.play
+w = Wordle::Game.new
+w.color = true
+w.play
