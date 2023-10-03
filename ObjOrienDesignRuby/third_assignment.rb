@@ -160,7 +160,3 @@ module Wordle
     end
   end
 end
-
-w = Wordle::Game.new
-w.color = true
-w.play
